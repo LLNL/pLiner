@@ -8,6 +8,7 @@ Compiler optimizations can alter significantly the numerical results of scientif
 
 ## Requirements to use pLiner
 - pLiner is implemented as a clang tool. Installing clang/LLVM compiler is a prerequisite to use pLiner. So far, we have tested pLiner on clang/LLVM 9.0.0.
+- pLiner uses [nlohmann::json](https://github.com/nlohmann/json) to parse json files in C/C++. It is required to be installed (`json.hpp` is in the header search path of clang/gcc) before using pLiner.
 - So far pLiner only supports C/C++.
 
 ## Building

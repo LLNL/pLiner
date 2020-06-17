@@ -22,7 +22,7 @@
 #include "analysis/funcPrint.h"
 #include "transform/funcTrans.h"
 #include "core/_funcRecord.h"
-#include "utils/json.hpp"
+#include "json.hpp"
 
 using namespace clang;
 using namespace clang::tooling;
