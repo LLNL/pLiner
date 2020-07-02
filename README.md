@@ -71,7 +71,7 @@ You can follow the instructions as shown in the example to run pLiner for your o
 
  ## License
 
-pLiner is distributed under the terms of the Apache license. All new contributions must be made under the Apache license.
+pLiner is distributed under the terms of the Apache-2.0 with LLVM-exception license. All new contributions must be made under this license.
  
  See LICENSE and NOTICE for details.
  
