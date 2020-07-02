@@ -12,7 +12,7 @@ Compiler optimizations can alter significantly the numerical results of scientif
 - So far pLiner only supports C/C++.
 
 ## Building
-  1. obtain and build clang/LLVM:  
+  1. obtain and build clang/LLVM (make sure to check out version 9.0.1):  
     https://clang.llvm.org/docs/LibASTMatchersTutorial.html  
   2. clone the repo. and put pLiner source inside clang-tools-extra  
     `$ cd clang-tools-extra`  
