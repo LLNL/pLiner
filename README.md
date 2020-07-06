@@ -11,17 +11,34 @@ Compiler optimizations can alter significantly the numerical results of scientif
 - pLiner uses [nlohmann::json](https://github.com/nlohmann/json) to parse json files in C/C++. Download file `json.hpp` from [https://github.com/nlohmann/json/blob/develop/single_include/nlohmann/json.hpp](https://github.com/nlohmann/json/blob/develop/single_include/nlohmann/json.hpp) (version 3.5.0) and place it in the directory `pLiner-sc20/clang-tool` before using pLiner.
 - So far pLiner only supports C/C++.
 
-## Building
-  1. obtain and build clang/LLVM (make sure to check out version 9.0.1):  
-    https://clang.llvm.org/docs/LibASTMatchersTutorial.html  
-  2. clone the repo. and put pLiner source inside clang-tools-extra  
-    `$ cd clang-tools-extra`  
-    `$ cp -r $PATH-TO-pLiner pLiner`  
-  3. add pLiner to clang tool CMakeLists.txt  
-    `$ echo "add_subdirectory(pLiner/clang-tool)" >> ../../clang-tools-extra/CmakeLists.txt`  
-  4. build clang tool  
-    `$ cd $PATH-TO-CLANG-BUILD`  
-    `$ ninja`  
+## Building clang/LLVM and pLiner
+  1. Building clang/LLVM 9.0.1:
+  ```
+  git clone https://github.com/llvm/llvm-project.git clang-llvm
+  git checkout llvmorg-9.0.1
+  cd ~/clang-llvm
+  mkdir build && cd build
+  cmake -G Ninja ../llvm -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" -DLLVM_BUILD_TESTS=ON
+  ninja
+  ninja check       # Test LLVM only.
+  ninja clang-test  # Test Clang only.
+  ninja install
+  ```
+
+  Note: Refer to https://clang.llvm.org/docs/LibASTMatchersTutorial.html in case you need instructions for installing `cmake` and/or `ninja`.
+  
+  2. Clone pLiner in the clang-tools-extra directory and build it:
+  ```
+  cd ../clang-tools-extra
+  git clone https://github.com/ucd-plse/pLiner-sc20.git
+  echo "add_subdirectory(pLiner-sc20/clang-tool)" >> CMakeLists.txt
+  cd ../build
+  ninja
+  ```
+  3. Export path to pLiner (this command may differ depending on shell):
+  ```
+  export PATH=/home/crubio/research/libraries/clang-llvm/build/bin:$PATH
+  ```
 
 ## Using pLiner
 
