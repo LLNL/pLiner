@@ -37,7 +37,7 @@ Compiler optimizations can alter significantly the numerical results of scientif
   ```
   3. Export path to pLiner (this command may differ depending on shell):
   ```
-  export PATH=/home/crubio/research/libraries/clang-llvm/build/bin:$PATH
+  export PATH=$PATH-TO-CLANG-LLVM/build/bin:$PATH
   ```
 
 ## Using pLiner
