@@ -14,7 +14,7 @@ add_clang_executable(pLiner
   core/_funcRecord.h
   core/_lineRecord.cpp
   core/_lineRecord.h
-  utils/json.hpp
+  json.hpp
 )
 
 target_link_libraries(pLiner
