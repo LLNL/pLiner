@@ -13,16 +13,16 @@ input=`sed -n "2p" $ftest.c | cut -d "/" -f 3 | sed "s/,/ /g"`
 O0exe="${ftest}_O0"
 O3exe="${ftrans}_O3"
 
-echo "$CC -o $O0exe $CFLAGS $ftest.c -lm"
+#echo "$CC -o $O0exe $CFLAGS $ftest.c -lm"
 $CC -o $O0exe $CFALGS $ftest.c -lm
-echo "$CC -o $O3exe ${CFLAGS_trouble} $ftrans.c -lm"
+#echo "$CC -o $O3exe ${CFLAGS_trouble} $ftrans.c -lm"
 $CC -o $O3exe ${CFLAGS_trouble} $ftrans.c -lm
 
-echo "./$O0exe $input"
+#echo "./$O0exe $input"
 ans=`./$O0exe $input` 
 echo $ans > runlog.txt 
 
-echo "./$O3exe $input"
+#echo "./$O3exe $input"
 result=`./$O3exe $input`
 echo $result >> runlog.txt
 

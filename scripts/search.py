@@ -2,6 +2,7 @@ import json
 import sys
 import subprocess
 import os
+import argparse
 
 class loopStruct:
   def __init__(self, start, end):
@@ -39,15 +40,19 @@ def splitloops(_forloops):
   return looplist.getLoopList()
 
 def trans_and_run(fregion):
-  global codefile, funclist, compileops
+  global codefile, funclist, compileops, msgout
   filesplits = codefile.split(".")
   outfile=filesplits[0]+"_trans."+filesplits[1]
   subprocess.call(['rm',  '-f', outfile])
 
   status, out, err ="null", "null", "null"
-  cmd = "pLiner "+codefile+" -r="+fregion+" -o="+outfile+" "+compileops  
+  cmd = "pLiner "+codefile+" -r="+fregion+" -o="+outfile+" "+compileops 
   #print cmd
-  subprocess.call(cmd.split(' '))
+  FNULL = open(os.devnull, 'w')
+  if msgout==1:  
+    subprocess.call(cmd.split(' '))
+  else:
+    subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
   
   if not os.path.exists(outfile):
     status="trans error"
@@ -55,7 +60,7 @@ def trans_and_run(fregion):
     return False
 
   #print "./run.sh ", outfile
-  ret = subprocess.call("./run.sh "+outfile, shell=True)
+  ret = subprocess.call("./run.sh "+outfile, shell=True, stdout=None, stderr=None)
   if ret:
     status="success"
     print "success"
@@ -70,7 +75,7 @@ def trans_and_run(fregion):
   return ret, status, out, err
 
 def funcrun(flist):
-  global codefile, compileops
+  global codefile, compileops, msgout
   filesplits = codefile.split(".")
   outfile=filesplits[0]+"_trans."+filesplits[1]
   subprocess.call(['rm',  '-f', outfile])
@@ -79,17 +84,21 @@ def funcrun(flist):
   fout = open(filesplits[0]+"-regions.json", "w")
   json.dump({"pLiner-funcs": flist}, fout, sort_keys=True, indent=2, separators=(',', ': '))
   fout.close()
-  cmd = "pLiner "+codefile+" --whole -r="+filesplits[0]+"-regions.json"+" -o="+outfile+" "+compileops  
+  cmd = "pLiner "+codefile+" --whole -r="+filesplits[0]+"-regions.json"+" -o="+outfile+" "+compileops 
   #print cmd
-  subprocess.call(cmd.split(' '))
-  
+  FNULL = open(os.devnull, 'w')
+  if msgout==1:  
+    subprocess.call(cmd.split(' '))
+  else:
+    subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
+
   if not os.path.exists(outfile):
     status="trans error"
     print "transformation failed."
     return False
 
   #print "./run.sh ", outfile
-  ret = subprocess.call("./run.sh "+outfile, shell=True)
+  ret = subprocess.call("./run.sh "+outfile, shell=True, stdout=None, stderr=None)
   if ret:
     status="success"
     print "success"
@@ -289,7 +298,7 @@ def print_and_exit(nlist):
       else:
         print "  line ", bstart 
 
-  global codefile, funclist, compileops, logfile
+  global codefile, funclist, compileops, logfile, msgout
   filesplits = codefile.split(".")
 
   ## generate final region log file
@@ -303,8 +312,12 @@ def print_and_exit(nlist):
   subprocess.call(['rm',  '-f', outfile])
 
   status, out, err ="null", "null", "null"
-  cmd = "pLiner "+codefile+" -r="+filesplits[0]+"-regions.json -o="+outfile+" "+compileops  
-  subprocess.call(cmd.split(' '))
+  cmd = "pLiner "+codefile+" -r="+filesplits[0]+"-regions.json -o="+outfile+" "+compileops 
+  FNULL = open(os.devnull, 'w')
+  if msgout==1:  
+    subprocess.call(cmd.split(' '))
+  else:
+    subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
 
   ## save log file
   cmd = "mv log.txt "+filesplits[0]+"-log.txt"
@@ -326,11 +339,15 @@ def clean_and_exit():
   exit(-1)
 
 def obtain_funcs():
-  global codefile, compileops
+  global codefile, compileops, msgout
 
   status, out, err ="null", "null", "null"
-  cmd = "pLiner "+codefile+" -po "+compileops  
-  subprocess.call(cmd.split(' '))
+  cmd = "pLiner "+codefile+" -po "+compileops
+  FNULL = open(os.devnull, 'w')
+  if msgout==1:
+    subprocess.call(cmd.split(' '))
+  else:
+    subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
 
   ans=[]
   with open('func-list.json') as f:
@@ -343,17 +360,34 @@ def obtain_funcs():
 
   return ans  
 
-if __name__=="__main__":
-  global codefile, funclist, compileops
 
+if __name__=="__main__":
+  parser=argparse.ArgumentParser(description=
+  """pLiner -- search for the origin of compiler-induced inconsistency\r\n
+     arg1 : code file that may contain the origin of compiler-induced inconsistency 
+     arg2 : the compilation command followed by -- 
+   Optional argument list
+     arg3 : 0/1 to disable/enable verbose printing, 0 in default 
+  e.g., python search.py test.c "--" """, 
+  formatter_class=argparse.RawTextHelpFormatter)
+  if len(sys.argv)<3:
+    parser.print_help(sys.stderr)
+    sys.exit(1)
+  #args=parser.parse_args()
+
+  global msgout
+  global codefile, funclist, compileops
   codefile = sys.argv[1]
   #funclist = sys.argv[2].replace('[', ' ').replace(']', ' ').replace(',', ' ').split()
   compileops = sys.argv[2]
+  msgout=0
+  if len(sys.argv)==4:
+    msgout=int(sys.argv[3])
+  
   funclist = obtain_funcs()
 
   global logfile
   logfile = open("log.txt", "w")
- 
   ## search over the functions
   fsuc, flist=searchfuncs(funclist)
   if fsuc:
@@ -365,8 +399,13 @@ if __name__=="__main__":
   fout = open("pLiner-input.json", "w")
   json.dump({"pLiner-funcs": funclist}, fout, sort_keys=True, indent=2, separators=(',', ': '))
   fout.close() 
-  cmd = "pLiner "+codefile+" -r pLiner-input.json -ao "+compileops  
-  subprocess.call(cmd.split(' '))
+  cmd = "pLiner "+codefile+" -r pLiner-input.json -ao "+compileops
+  FNULL = open(os.devnull, 'w')
+  if msgout==1:  
+    subprocess.call(cmd.split(' '))
+  else:
+    subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
+
 
 
   forloops, bbs = {}, {}
