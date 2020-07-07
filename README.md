@@ -75,15 +75,49 @@ We use a simple C program `vtest.c` to show how to use pLiner. This program was 
   python ../scripts/search.py vtest.c "--"
   ```
   
-  The first argument `vtest.c` is the input program; the second argument `"--"` indicates that to compile the input program there are no header files/librares to specify in the compilation command. Additionally, if there are any such compilation options such as "-I $PATH-TO-HEADERS", specify them following "--" in the second argument, e.g., "-- -I $PATH-TO-HEADERS". 
+  The first argument `vtest.c` is the input program; the second argument `"--"` indicates that to compile the input program there are no header files/librares to specify in the compilation command. Additionally, if there are any such compilation options such as "-I $PATH-TO-HEADERS", specify them following "--" in the second argument, e.g., "-- -I $PATH-TO-HEADERS". Use `--help` to check for the details of the arguments.
 
-TODO: INCLUDE A BOX WITH THE EXPECTED OUTPUT AFTER CLEANING UP PLINER'S OUTPUT.
+  Following is the output.
+  ```
+  ...
+  The following areas are transformed to high precision:
+compute :
+   20 -> 22
+   23 -> 23
+failed
+The following areas are transformed to high precision:
+compute :
+   25 -> 25
+   26 -> 26
+   28 -> 28
+success
+The following areas are transformed to high precision:
+compute :
+   25 -> 25
+success
+Search for lines:
+The following areas are transformed to high precision:
+compute :
+   25 -> 25
+success
+
+
+ Bug area:
+compute :
+  line  25
+
+  ```
+
 
    * pLiner found the root cause of the inconsistency (function `compute`, line 25):  
     ` compute :`  
     `    line 25`    
 
    * pLiner generated a transformed program `vtest_trans.c`.
+   ```
+   ls *.c
+   vtest.c vtest_trans.c
+   ```
    
    4. Compile the transformed `vtest_trans.c` program with both `gcc -O3 -ffast-math` and `gcc -O0`, and compare the results:
    ```
