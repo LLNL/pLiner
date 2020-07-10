@@ -1,10 +1,19 @@
 cmake_minimum_required(VERSION 2.8.4)
-project(fp-debugger)
+project(pLiner)
 
-#set(LLVM_PATH /home/fptesting/clang+llvm)
-set(LLVM_PATH /usr/workspace/wsa/guo8/home1/clang-llvm/build)
+#set(LLVM_PATH /usr/workspace/wsa/guo8/home1/clang-llvm/build)
+set(LLVM_PATH /home/huiguo15/home1/clang+llvm)
 link_directories(${LLVM_PATH}/lib)
 include_directories(${LLVM_PATH}/include)
+
+#execute_process(COMMAND llvm-config --libdir OUTPUT_VARIABLE llvmlib)
+#execute_process(COMMAND llvm-config --includedir OUTPUT_VARIABLE llvminclude)
+#
+#message(STATUS "llvmlib="${llvmlib})
+#message(STATUS "llvminclude="${llvminclude})
+#
+#link_directories(${llvmlib})
+#include_directories(${llvminclude})
 
 add_definitions(
 -D_GNU_SOURCE 
@@ -16,11 +25,13 @@ add_definitions(
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fno-exceptions -fno-rtti")
 set(LLVM_LINK_COMPONENTS Support)
 
-add_executable(fp-debugger
+add_executable(pLiner
   FPDebugger.cpp
   FPDebugger.h
   analysis/funcAnalysis.cpp
   analysis/funcAnalysis.h
+  analysis/funcPrint.cpp
+  analysis/funcPrint.h
   transform/funcTrans.cpp
   transform/funcTrans.h
   core/_fp.h
@@ -28,11 +39,11 @@ add_executable(fp-debugger
   core/_funcRecord.h
   core/_lineRecord.cpp
   core/_lineRecord.h
-  utils/json.hpp
+  json.hpp
 )
 
 
-target_link_libraries(fp-debugger
+target_link_libraries(pLiner
   clangTooling 
   clangDriver 
   clangFrontend 
@@ -48,29 +59,45 @@ target_link_libraries(fp-debugger
   clangRewriteFrontend 
 )
 
-target_link_libraries(fp-debugger
+target_link_libraries(pLiner
+  LLVMXRay 
+  LLVMWindowsManifest 
+  LLVMTextAPI 
+  LLVMTableGen 
+  LLVMSymbolize 
+  LLVMDebugInfoPDB 
+  LLVMOrcJIT 
+  LLVMJITLink 
+  LLVMObjectYAML 
+  LLVMMCA 
   LLVMLTO 
   LLVMPasses 
   LLVMObjCARCOpts 
-  LLVMMIRParser 
-  LLVMSymbolize 
-  LLVMDebugInfoPDB 
-  LLVMDebugInfoDWARF 
-  LLVMCoverage 
-  LLVMMCA 
-  LLVMTableGen 
+  LLVMLineEditor 
+  LLVMLibDriver 
+  LLVMInterpreter 
+  LLVMFuzzMutate 
+  LLVMMCJIT 
+  LLVMExecutionEngine 
+  LLVMRuntimeDyld 
   LLVMDlltoolDriver 
-  LLVMXRay 
-  LLVMOrcJIT 
+  LLVMOption 
+  LLVMDebugInfoGSYM 
+  LLVMCoverage 
+  LLVMCoroutines 
   LLVMXCoreDisassembler 
   LLVMXCoreCodeGen 
   LLVMXCoreDesc 
   LLVMXCoreInfo 
-  LLVMXCoreAsmPrinter 
+  LLVMX86Disassembler 
+  LLVMX86AsmParser 
+  LLVMX86CodeGen 
+  LLVMX86Desc 
+  LLVMX86Utils 
+  LLVMX86Info 
   LLVMWebAssemblyDisassembler 
   LLVMWebAssemblyCodeGen 
   LLVMWebAssemblyDesc 
-  LLVMWebAssemblyAsmPrinter 
   LLVMWebAssemblyAsmParser 
   LLVMWebAssemblyInfo 
   LLVMSystemZDisassembler 
@@ -78,40 +105,39 @@ target_link_libraries(fp-debugger
   LLVMSystemZAsmParser 
   LLVMSystemZDesc 
   LLVMSystemZInfo 
-  LLVMSystemZAsmPrinter 
   LLVMSparcDisassembler 
   LLVMSparcCodeGen 
   LLVMSparcAsmParser 
   LLVMSparcDesc 
   LLVMSparcInfo 
-  LLVMSparcAsmPrinter 
+  LLVMRISCVDisassembler 
+  LLVMRISCVCodeGen 
+  LLVMRISCVAsmParser 
+  LLVMRISCVDesc 
+  LLVMRISCVUtils 
+  LLVMRISCVInfo 
   LLVMPowerPCDisassembler 
   LLVMPowerPCCodeGen 
   LLVMPowerPCAsmParser 
   LLVMPowerPCDesc 
   LLVMPowerPCInfo 
-  LLVMPowerPCAsmPrinter 
   LLVMNVPTXCodeGen 
   LLVMNVPTXDesc 
   LLVMNVPTXInfo 
-  LLVMNVPTXAsmPrinter 
   LLVMMSP430Disassembler 
   LLVMMSP430CodeGen 
   LLVMMSP430AsmParser 
   LLVMMSP430Desc 
   LLVMMSP430Info 
-  LLVMMSP430AsmPrinter 
   LLVMMipsDisassembler 
   LLVMMipsCodeGen 
   LLVMMipsAsmParser 
   LLVMMipsDesc 
   LLVMMipsInfo 
-  LLVMMipsAsmPrinter 
   LLVMLanaiDisassembler 
   LLVMLanaiCodeGen 
   LLVMLanaiAsmParser 
   LLVMLanaiDesc 
-  LLVMLanaiAsmPrinter 
   LLVMLanaiInfo 
   LLVMHexagonDisassembler 
   LLVMHexagonCodeGen 
@@ -123,86 +149,67 @@ target_link_libraries(fp-debugger
   LLVMBPFAsmParser 
   LLVMBPFDesc 
   LLVMBPFInfo 
-  LLVMBPFAsmPrinter 
   LLVMARMDisassembler 
   LLVMARMCodeGen 
   LLVMARMAsmParser 
   LLVMARMDesc 
-  LLVMARMInfo 
-  LLVMARMAsmPrinter 
   LLVMARMUtils 
+  LLVMARMInfo 
   LLVMAMDGPUDisassembler 
   LLVMAMDGPUCodeGen 
-  LLVMAMDGPUAsmParser 
-  LLVMAMDGPUDesc 
-  LLVMAMDGPUInfo 
-  LLVMAMDGPUAsmPrinter 
-  LLVMAMDGPUUtils 
-  LLVMAArch64Disassembler 
-  LLVMAArch64CodeGen 
-  LLVMAArch64AsmParser 
-  LLVMAArch64Desc 
-  LLVMAArch64Info 
-  LLVMAArch64AsmPrinter 
-  LLVMAArch64Utils 
-  LLVMObjectYAML 
-  LLVMLibDriver 
-  LLVMOption 
-  LLVMOptRemarks 
-  LLVMWindowsManifest 
-  LLVMTextAPI 
-  LLVMFuzzMutate 
-  LLVMX86Disassembler 
-  LLVMX86AsmParser 
-  LLVMX86CodeGen 
-  LLVMGlobalISel 
-  LLVMSelectionDAG 
-  LLVMAsmPrinter 
-  LLVMX86Desc 
-  LLVMMCDisassembler 
-  LLVMX86Info 
-  LLVMX86AsmPrinter 
-  LLVMX86Utils 
-  LLVMMCJIT 
-  LLVMLineEditor 
-  LLVMInterpreter 
-  LLVMExecutionEngine 
-  LLVMRuntimeDyld 
-  LLVMCodeGen 
-  LLVMTarget 
-  LLVMCoroutines 
+  LLVMMIRParser 
   LLVMipo 
   LLVMInstrumentation 
   LLVMVectorize 
-  LLVMScalarOpts 
   LLVMLinker 
   LLVMIRReader 
   LLVMAsmParser 
+  LLVMAMDGPUAsmParser 
+  LLVMAMDGPUDesc 
+  LLVMAMDGPUUtils 
+  LLVMAMDGPUInfo 
+  LLVMAArch64Disassembler 
+  LLVMMCDisassembler 
+  LLVMAArch64CodeGen 
+  LLVMGlobalISel 
+  LLVMSelectionDAG 
+  LLVMAsmPrinter 
+  LLVMDebugInfoDWARF 
+  LLVMCodeGen 
+  LLVMTarget 
+  LLVMScalarOpts 
   LLVMInstCombine 
-  LLVMBitWriter 
   LLVMAggressiveInstCombine 
   LLVMTransformUtils 
+  LLVMBitWriter 
   LLVMAnalysis 
   LLVMProfileData 
   LLVMObject 
+  LLVMBitReader 
+  LLVMBitstreamReader 
+  LLVMCore 
+  LLVMRemarks 
+  LLVMAArch64AsmParser 
   LLVMMCParser 
+  LLVMAArch64Desc 
   LLVMMC 
   LLVMDebugInfoCodeView 
   LLVMDebugInfoMSF 
-  LLVMBitReader 
-  LLVMCore 
   LLVMBinaryFormat 
+  LLVMAArch64Utils 
+  LLVMAArch64Info 
   LLVMSupport 
   LLVMDemangle
 )
 
 include(FindCurses)
-target_link_libraries(fp-debugger
+target_link_libraries(pLiner
     pthread
     z
     dl
     ${CURSES_LIBRARIES}
 )
 
-install(TARGETS fp-debugger
+install(TARGETS pLiner
   DESTINATION bin)
+
