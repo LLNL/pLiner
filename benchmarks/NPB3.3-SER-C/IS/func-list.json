@@ -1,0 +1,9 @@
+{
+    "pLiner-funcs": [
+        "randlc",
+        "create_seq",
+        "full_verify",
+        "rank",
+        "main"
+    ]
+}

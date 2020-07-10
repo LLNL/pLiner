@@ -1,0 +1,19 @@
+{
+    "pLiner-funcs": [
+        "main",
+        "setup",
+        "mg3P",
+        "psinv",
+        "resid",
+        "rprj3",
+        "interp",
+        "norm2u3",
+        "rep_nrm",
+        "comm3",
+        "zran3",
+        "showall",
+        "power",
+        "bubble",
+        "zero3"
+    ]
+}

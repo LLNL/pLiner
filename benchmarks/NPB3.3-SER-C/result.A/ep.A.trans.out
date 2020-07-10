@@ -1,0 +1,52 @@
+
+
+ NAS Parallel Benchmarks (NPB3.3-SER-C) - EP Benchmark
+
+ Number of random numbers generated:       536870912
+
+EP Benchmark Results:
+
+CPU Time =  217.1667
+N = 2^   28
+No. Gaussian Pairs =       210832767
+Sums =    -4.295875165632661E+03    -7.380068671269029E-14
+Counts: 
+  0       98257395
+  1       93827014
+  2       17611549
+  3        1110028
+  4          26536
+  5            245
+  6              0
+  7              0
+  8              0
+  9              0
+
+
+ EP Benchmark Completed.
+ Class           =                        A
+ Size            =                536870912
+ Iterations      =                        0
+ Time in seconds =                   217.17
+ Mop/s total     =                     2.47
+ Operation type  = Random numbers generated
+ Verification    =               SUCCESSFUL
+ Version         =                    3.3.1
+ Compile date    =              07 May 2020
+
+ Compile options:
+    CC           = gcc
+    CLINK        = $(CC)
+    C_LIB        = -lm
+    C_INC        = -I../common
+    CFLAGS       = -g -Wall -O3 -mcmodel=medium
+    CLINKFLAGS   = -O3 -mcmodel=medium
+    RAND         = randdp
+
+--------------------------------------
+ Please send all errors/feedbacks to:
+ Center for Manycore Programming
+ cmp@aces.snu.ac.kr
+ http://aces.snu.ac.kr
+--------------------------------------
+

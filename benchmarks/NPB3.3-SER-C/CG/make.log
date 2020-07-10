@@ -1,0 +1,53 @@
+[guo8@ray23:NPB3.3-SER-C]$ make cg CLASS=A
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd CG; make CLASS=A
+make[1]: Entering directory '/usr/WS1/guo8/home1/clang-llvm/clang-tools-extra/pLiner/benchmarks/NPB3.3-SER-C/CG'
+make[2]: Entering directory '/usr/WS1/guo8/home1/clang-llvm/clang-tools-extra/pLiner/benchmarks/NPB3.3-SER-C/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/usr/WS1/guo8/home1/clang-llvm/clang-tools-extra/pLiner/benchmarks/NPB3.3-SER-C/sys'
+../sys/setparams cg A
+gcc  -c -I../common -g -Wall -O3 -mcmodel=medium cg.c
+cg.c: In function 'main':
+cg.c:323:5: warning: format '%E' expects argument of type 'double', but argument 3 has type 'long double' [-Wformat=]
+     printf("    %5d       %20.14E%20.13f\n", it, rnorm, zeta);
+     ^
+cg.c:323:5: warning: format '%f' expects argument of type 'double', but argument 4 has type 'long double' [-Wformat=]
+cg.c:349:7: warning: format '%E' expects argument of type 'double', but argument 2 has type 'long double' [-Wformat=]
+       printf(" Zeta is    %20.13E\n", zeta);
+       ^
+cg.c:350:7: warning: format '%E' expects argument of type 'double', but argument 2 has type 'long double' [-Wformat=]
+       printf(" Error is   %20.13E\n", err);
+       ^
+cg.c:354:7: warning: format '%E' expects argument of type 'double', but argument 2 has type 'long double' [-Wformat=]
+       printf(" Zeta                %20.13E\n", zeta);
+       ^
+cg.c:355:7: warning: format '%E' expects argument of type 'double', but argument 2 has type 'long double' [-Wformat=]
+       printf(" The correct zeta is %20.13E\n", zeta_verify_value);
+       ^
+cg.c:388:9: warning: format '%f' expects argument of type 'double', but argument 3 has type 'long double' [-Wformat=]
+         printf("  %8s:%9.3f\n", t_names[i], t);
+         ^
+cg.c:390:9: warning: format '%f' expects argument of type 'double', but argument 3 has type 'long double' [-Wformat=]
+         printf("  %8s:%9.3f  (%6.2f%%)\n", t_names[i], t, t*100.0/tmax);
+         ^
+cg.c:390:9: warning: format '%f' expects argument of type 'double', but argument 4 has type 'long double' [-Wformat=]
+cg.c:393:11: warning: format '%f' expects argument of type 'double', but argument 3 has type 'long double' [-Wformat=]
+           printf("    --> %8s:%9.3f  (%6.2f%%)\n", "rest", t, t*100.0/tmax);
+           ^
+cg.c:393:11: warning: format '%f' expects argument of type 'double', but argument 4 has type 'long double' [-Wformat=]
+cg.c: In function 'icnvrt':
+cg.c:876:16: warning: unused variable 'x_H' [-Wunused-variable]
+    long double x_H = x;
+                ^
+cg.c: In function 'main':
+cg.c:251:9: warning: 'rnorm' may be used uninitialized in this function [-Wmaybe-uninitialized]
+     tmp1=rnorm;conj_grad(colidx, rowstr, x, z, a, p, q, r, &tmp1);
+         ^
+gcc -O3 -mcmodel=medium -o ../bin/cg.A.x cg.o ../common/print_results.o ../common/randdp.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/usr/WS1/guo8/home1/clang-llvm/clang-tools-extra/pLiner/benchmarks/NPB3.3-SER-C/CG'
+
