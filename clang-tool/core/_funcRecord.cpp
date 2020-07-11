@@ -91,11 +91,16 @@ void _funcRecord::processForLoops(const Stmt* st){
     unsigned end = context->getFullLoc(ESL).getSpellingLineNumber();
 
     forloops.push_back( std::make_tuple(start, end));
+    if(const Stmt* forBodyStmt = dyn_cast<Stmt>(forst->getBody())){
+      processForLoops(forBodyStmt);
+    }
+    else{
     const CompoundStmt *forBody = dyn_cast<CompoundStmt>(forst->getBody());
     CompoundStmt::const_body_iterator stmtI;
     for (stmtI =forBody->body_begin(); stmtI != forBody->body_end(); stmtI++){
       const Stmt * st = *stmtI;
       processForLoops(st);
+    }
     }
   }
 
@@ -193,6 +198,12 @@ void _funcRecord::processStmts(const Stmt* statement){
   //string ch = exitSL.getLocWithOffset(off).printToString(context->getSourceManager()); 
   //outs() << type << "on line " << exitLine << ": " << ch << "\n;";
 }
+
+//vector<const DeclRefExpr*>& _funcRecord::obtainReads(const clang::Expr* epr, unsigned line, _lineRecord* lRp){
+//  vector<const DeclRefExpr*>* reads = new std::vector<const DeclRefExpr*>();
+  //string ch = exitSL.getLocWithOffset(off).printToString(context->getSourceManager()); 
+  //outs() << type << "on line " << exitLine << ": " << ch << "\n;";
+//}
 
 vector<const DeclRefExpr*>& _funcRecord::obtainReads(const clang::Expr* epr, unsigned line, _lineRecord* lRp){
   vector<const DeclRefExpr*>* reads = new std::vector<const DeclRefExpr*>();
@@ -391,11 +402,16 @@ void _funcRecord::processWhileStmt(const WhileStmt* wst, _lineRecord * lRp){
 void _funcRecord::processForStmt(const ForStmt* forst, _lineRecord * lRp){
   // for loops
   const CompoundStmt *forBody = dyn_cast<CompoundStmt>(forst->getBody());
-  CompoundStmt::const_body_iterator stmtI;
-  for (stmtI =forBody->body_begin(); stmtI != forBody->body_end(); stmtI++){
-    const Stmt * st = *stmtI;
-    //st->dump();
-    processStmts(st);
+  if(const Stmt* forBodyStmt = dyn_cast<Stmt>(forst->getBody())){
+    processStmts(forBodyStmt);
+  } 
+  else{
+    CompoundStmt::const_body_iterator stmtI;
+    for (stmtI =forBody->body_begin(); stmtI != forBody->body_end(); stmtI++){
+      const Stmt * st = *stmtI;
+      //st->dump();
+      processStmts(st);
+    }
   }
 }
 
@@ -726,6 +742,11 @@ void _funcRecord::transRegionWhileStmt(Rewriter& TheRewriter, const WhileStmt* w
 }
 void _funcRecord::transRegionForStmt(Rewriter& TheRewriter, const ForStmt* forst){
   // for loops
+  if(const Stmt* forBodyStmt = dyn_cast<Stmt>(forst->getBody())){
+    transRegionStmts(TheRewriter, forBodyStmt);
+    return;
+  }
+   
   const CompoundStmt *forBody = dyn_cast<CompoundStmt>(forst->getBody());
   CompoundStmt::const_body_iterator stmtI;
   for (stmtI =forBody->body_begin(); stmtI != forBody->body_end(); stmtI++){
@@ -942,6 +963,11 @@ void _funcRecord::transWholeWhileStmt(Rewriter& TheRewriter, const WhileStmt* ws
 }
 void _funcRecord::transWholeForStmt(Rewriter& TheRewriter, const ForStmt* forst){
   // for loops
+  if(const Stmt* forBodyStmt = dyn_cast<Stmt>(forst->getBody())){
+    transWholeStmts(TheRewriter, forBodyStmt);
+    return;
+  }
+   
   const CompoundStmt *forBody = dyn_cast<CompoundStmt>(forst->getBody());
   CompoundStmt::const_body_iterator stmtI;
   for (stmtI =forBody->body_begin(); stmtI != forBody->body_end(); stmtI++){
@@ -1320,7 +1346,7 @@ void _funcRecord::printFuncRecord(string filename){
     string s = parameter->getNameAsString();
     if (parameter == *fpPointervarlist.begin()) 
       fout << " \"" << s << "\"";
-    else	
+    else       
       fout << ", \"" << s << "\"";
   }
   fout << "],\n";

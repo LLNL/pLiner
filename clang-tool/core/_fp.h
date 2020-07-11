@@ -7,7 +7,7 @@
 using namespace clang;
 using namespace std;
 
-//#define DEBUG 1
+#define DEBUG 1
 
 #ifdef DEBUG 
 #define Debug(x) (x)
