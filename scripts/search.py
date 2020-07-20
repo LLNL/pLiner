@@ -4,6 +4,15 @@ import subprocess
 import os
 import argparse
 
+def prRed(skk): print("\033[91m {}\033[00m" .format(skk)) 
+def prGreen(skk): print("\033[92m {}\033[00m" .format(skk)) 
+def prYellow(skk): print("\033[93m {}\033[00m" .format(skk)) 
+def prLightPurple(skk): print("\033[94m {}\033[00m" .format(skk)) 
+def prPurple(skk): print("\033[95m {}\033[00m" .format(skk)) 
+def prCyan(skk): print("\033[96m {}\033[00m" .format(skk)) 
+def prLightGray(skk): print("\033[97m {}\033[00m" .format(skk)) 
+def prBlack(skk): print("\033[98m {}\033[00m" .format(skk)) 
+
 class loopStruct:
   def __init__(self, start, end):
     self.start, self.end = start, end
@@ -80,6 +89,9 @@ def funcrun(flist):
   outfile=filesplits[0]+"_trans."+filesplits[1]
   subprocess.call(['rm',  '-f', outfile])
 
+  print "\nThe following functions are transformed to high precision:"
+  print flist
+
   status, out, err ="null", "null", "null"
   fout = open(filesplits[0]+"-regions.json", "w")
   json.dump({"pLiner-funcs": flist}, fout, sort_keys=True, indent=2, separators=(',', ': '))
@@ -116,7 +128,7 @@ def funcrun(flist):
 
 def looprun(llist, typestr="LOOP"):
   global codefile, funclist, compileops, logfile
-  print "The following areas are transformed to high precision:"
+  print "\nThe following areas are transformed to high precision:"
 
   regions = {}
   for f in llist.keys():
@@ -138,7 +150,7 @@ def looprun(llist, typestr="LOOP"):
 
 def bbrun(bblist, typestr="BB"):
   global codefile, funclist, compileops, logfile
-  print "The following areas are transformed to high precision:"
+  print "\nThe following areas are transformed to high precision:"
 
   regions = {}
   for f in bblist.keys():
@@ -181,11 +193,11 @@ def bisection(tranregs, f, typestr):
   return nllist
 
 def searchfuncs(flist):
-  print "Search for functions:"
+  prPurple("\n\nSearch for functions:")
 
   # step 1: translate all funcs   
   if not funcrun(flist):
-    print "transforming all buggy functions does not fix the bug"
+    prRed("transforming all buggy functions does not fix the bug")
     return False, flist
 
   # step 2: perform bisection search over the funcs
@@ -207,7 +219,7 @@ def searchfuncs(flist):
 def searchloops(rawloops):
   #return True, [[92, 190]]
 
-  print "Search for loops:"
+  prPurple("\n\nSearch for loops:")
 
   # step 1: translate the outermost loops   
   tranloops={}
@@ -218,7 +230,7 @@ def searchloops(rawloops):
 
   ret = {}
   if not looprun(tranloops):
-    print "transforming for loops does not fix the bug"
+    prRed("transforming for loops does not fix the bug")
     for f in tranloops.keys():
       ret[f]=[] 
       for l in tranloops[f]:
@@ -260,10 +272,10 @@ def searchloops(rawloops):
 
 def searchbbs(bbs):
   #return True, [[130, 132]]
-  print "Search for bbs:"
+  prPurple("\n\nSearch for bbs:")
   # step 1: translate all bbs   
   if not bbrun(bbs):
-    print "transforming all buggy bbs does not fix the bug"
+    prRed("transforming all buggy bbs does not fix the bug")
     return False, bbs
 
   # step 2: perform bisection search over the bbs of each function
@@ -274,10 +286,10 @@ def searchbbs(bbs):
   return True, bbs
 
 def searchlines(lines):
-  print "Search for lines:"
+  prPurple("\n\nSearch for lines:")
   # step 1: translate all lines   
   if not bbrun(lines, "LINE"):
-    print "transforming all buggy lines does not fix the bug"
+    prRed("transforming all buggy lines does not fix the bug")
     return False, lines
 
   # step 2: perform bisection search over the lines of each function
@@ -354,8 +366,8 @@ def obtain_funcs():
     data = json.load(f)
     funcs = data['pLiner-funcs']
     for func in funcs:
-      if func=="initPointer" or func=="main" or func=="rUpdateQuadratureData" or func=="rUpdateQuadratureData3D": ## for Laghos and Varity tests
-        continue
+      #if func=="initPointer" or func=="main" or func=="rUpdateQuadratureData" or func=="rUpdateQuadratureData3D": ## for Laghos and Varity tests
+      #  continue
       ans.append(func)	
 
   return ans  
@@ -384,7 +396,19 @@ if __name__=="__main__":
   if len(sys.argv)==4:
     msgout=int(sys.argv[3])
   
+  ## obtain functions  
   funclist = obtain_funcs()
+  exclude=[]
+  if os.path.isfile('./exclude.json'):
+    with open('exclude.json') as f:
+      data = json.load(f)
+      if codefile in data:
+        funcs = data[codefile]
+        for func in funcs:
+          exclude.append(func)
+  
+  func2explore=[item for item in funclist if item not in exclude]
+  funclist = func2explore
 
   global logfile
   logfile = open("log.txt", "w")
@@ -437,6 +461,8 @@ if __name__=="__main__":
     _llist=llist[funcname]
     for i in xrange(len(_bbs)):
       bstart, bend = _bbs[i][0], _bbs[i][1]
+      if bend<bstart:
+        continue
       add=False
       if lsuc:
         for lstart, lend in _llist:
