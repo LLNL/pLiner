@@ -2,10 +2,13 @@ cmake_minimum_required(VERSION 2.8.4)
 
 project(pLiner DESCRIPTION "pLiner" LANGUAGES CXX)
 
-#set(LLVM_PATH /usr/workspace/wsa/guo8/home1/clang-llvm/build)
-set(LLVM_PATH /home/huiguo15/home1/clang+llvm)
-link_directories(${LLVM_PATH}/lib)
-include_directories(${LLVM_PATH}/include)
+#set(LLVM_PATH /home/huiguo15/home1/clang+llvm)
+#link_directories(${LLVM_PATH}/lib)
+#include_directories(${LLVM_PATH}/include)
+
+execute_process(COMMAND llvm-config --cxxflags
+OUTPUT_VARIABLE MY_LLVM_CXX_FLAGS
+OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 add_definitions(
 -D_GNU_SOURCE 
@@ -14,7 +17,7 @@ add_definitions(
 -D__STDC_LIMIT_MACROS
 )
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fno-exceptions -fno-rtti")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MY_LLVM_CXX_FLAGS} -fno-rtti")
 set(LLVM_LINK_COMPONENTS Support)
 
 add_executable(pLiner
