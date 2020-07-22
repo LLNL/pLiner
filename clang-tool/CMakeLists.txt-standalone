@@ -1,19 +1,11 @@
 cmake_minimum_required(VERSION 2.8.4)
-project(pLiner)
+
+project(pLiner DESCRIPTION "pLiner" LANGUAGES CXX)
 
 #set(LLVM_PATH /usr/workspace/wsa/guo8/home1/clang-llvm/build)
 set(LLVM_PATH /home/huiguo15/home1/clang+llvm)
 link_directories(${LLVM_PATH}/lib)
 include_directories(${LLVM_PATH}/include)
-
-#execute_process(COMMAND llvm-config --libdir OUTPUT_VARIABLE llvmlib)
-#execute_process(COMMAND llvm-config --includedir OUTPUT_VARIABLE llvminclude)
-#
-#message(STATUS "llvmlib="${llvmlib})
-#message(STATUS "llvminclude="${llvminclude})
-#
-#link_directories(${llvmlib})
-#include_directories(${llvminclude})
 
 add_definitions(
 -D_GNU_SOURCE 
@@ -42,7 +34,6 @@ add_executable(pLiner
   json.hpp
 )
 
-
 target_link_libraries(pLiner
   clangTooling 
   clangDriver 
@@ -59,147 +50,18 @@ target_link_libraries(pLiner
   clangRewriteFrontend 
 )
 
+execute_process(COMMAND llvm-config --ldflags 
+OUTPUT_VARIABLE MY_LLVM_LINKER_FLAGS1
+OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+execute_process(COMMAND llvm-config --libs
+OUTPUT_VARIABLE MY_LLVM_LINKER_FLAGS2
+OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+set(MY_LLVM_LIBRARY "${MY_LLVM_LINKER_FLAGS1} ${MY_LLVM_LINKER_FLAGS2}")
+
 target_link_libraries(pLiner
-  LLVMXRay 
-  LLVMWindowsManifest 
-  LLVMTextAPI 
-  LLVMTableGen 
-  LLVMSymbolize 
-  LLVMDebugInfoPDB 
-  LLVMOrcJIT 
-  LLVMJITLink 
-  LLVMObjectYAML 
-  LLVMMCA 
-  LLVMLTO 
-  LLVMPasses 
-  LLVMObjCARCOpts 
-  LLVMLineEditor 
-  LLVMLibDriver 
-  LLVMInterpreter 
-  LLVMFuzzMutate 
-  LLVMMCJIT 
-  LLVMExecutionEngine 
-  LLVMRuntimeDyld 
-  LLVMDlltoolDriver 
-  LLVMOption 
-  LLVMDebugInfoGSYM 
-  LLVMCoverage 
-  LLVMCoroutines 
-  LLVMXCoreDisassembler 
-  LLVMXCoreCodeGen 
-  LLVMXCoreDesc 
-  LLVMXCoreInfo 
-  LLVMX86Disassembler 
-  LLVMX86AsmParser 
-  LLVMX86CodeGen 
-  LLVMX86Desc 
-  LLVMX86Utils 
-  LLVMX86Info 
-  LLVMWebAssemblyDisassembler 
-  LLVMWebAssemblyCodeGen 
-  LLVMWebAssemblyDesc 
-  LLVMWebAssemblyAsmParser 
-  LLVMWebAssemblyInfo 
-  LLVMSystemZDisassembler 
-  LLVMSystemZCodeGen 
-  LLVMSystemZAsmParser 
-  LLVMSystemZDesc 
-  LLVMSystemZInfo 
-  LLVMSparcDisassembler 
-  LLVMSparcCodeGen 
-  LLVMSparcAsmParser 
-  LLVMSparcDesc 
-  LLVMSparcInfo 
-  LLVMRISCVDisassembler 
-  LLVMRISCVCodeGen 
-  LLVMRISCVAsmParser 
-  LLVMRISCVDesc 
-  LLVMRISCVUtils 
-  LLVMRISCVInfo 
-  LLVMPowerPCDisassembler 
-  LLVMPowerPCCodeGen 
-  LLVMPowerPCAsmParser 
-  LLVMPowerPCDesc 
-  LLVMPowerPCInfo 
-  LLVMNVPTXCodeGen 
-  LLVMNVPTXDesc 
-  LLVMNVPTXInfo 
-  LLVMMSP430Disassembler 
-  LLVMMSP430CodeGen 
-  LLVMMSP430AsmParser 
-  LLVMMSP430Desc 
-  LLVMMSP430Info 
-  LLVMMipsDisassembler 
-  LLVMMipsCodeGen 
-  LLVMMipsAsmParser 
-  LLVMMipsDesc 
-  LLVMMipsInfo 
-  LLVMLanaiDisassembler 
-  LLVMLanaiCodeGen 
-  LLVMLanaiAsmParser 
-  LLVMLanaiDesc 
-  LLVMLanaiInfo 
-  LLVMHexagonDisassembler 
-  LLVMHexagonCodeGen 
-  LLVMHexagonAsmParser 
-  LLVMHexagonDesc 
-  LLVMHexagonInfo 
-  LLVMBPFDisassembler 
-  LLVMBPFCodeGen 
-  LLVMBPFAsmParser 
-  LLVMBPFDesc 
-  LLVMBPFInfo 
-  LLVMARMDisassembler 
-  LLVMARMCodeGen 
-  LLVMARMAsmParser 
-  LLVMARMDesc 
-  LLVMARMUtils 
-  LLVMARMInfo 
-  LLVMAMDGPUDisassembler 
-  LLVMAMDGPUCodeGen 
-  LLVMMIRParser 
-  LLVMipo 
-  LLVMInstrumentation 
-  LLVMVectorize 
-  LLVMLinker 
-  LLVMIRReader 
-  LLVMAsmParser 
-  LLVMAMDGPUAsmParser 
-  LLVMAMDGPUDesc 
-  LLVMAMDGPUUtils 
-  LLVMAMDGPUInfo 
-  LLVMAArch64Disassembler 
-  LLVMMCDisassembler 
-  LLVMAArch64CodeGen 
-  LLVMGlobalISel 
-  LLVMSelectionDAG 
-  LLVMAsmPrinter 
-  LLVMDebugInfoDWARF 
-  LLVMCodeGen 
-  LLVMTarget 
-  LLVMScalarOpts 
-  LLVMInstCombine 
-  LLVMAggressiveInstCombine 
-  LLVMTransformUtils 
-  LLVMBitWriter 
-  LLVMAnalysis 
-  LLVMProfileData 
-  LLVMObject 
-  LLVMBitReader 
-  LLVMBitstreamReader 
-  LLVMCore 
-  LLVMRemarks 
-  LLVMAArch64AsmParser 
-  LLVMMCParser 
-  LLVMAArch64Desc 
-  LLVMMC 
-  LLVMDebugInfoCodeView 
-  LLVMDebugInfoMSF 
-  LLVMBinaryFormat 
-  LLVMAArch64Utils 
-  LLVMAArch64Info 
-  LLVMSupport 
-  LLVMDemangle
+  ${MY_LLVM_LIBRARY}
 )
 
 include(FindCurses)
@@ -212,4 +74,3 @@ target_link_libraries(pLiner
 
 install(TARGETS pLiner
   DESTINATION bin)
-
