@@ -14,12 +14,12 @@ int main(){
   double b = 200;
   double c[2];
 
-  c[0]=1;
-  c[1]=2;
   foo1(&a);
   foo2(&a, &b);
 
-  printf("a=%lf, b=%lf\n", a, b);
+  c[0]=a;
+  c[1]=b;
+  printf("c[0]=%lf, c[1]=%lf\n", c[0], c[1]);
 
   return 0;
 }

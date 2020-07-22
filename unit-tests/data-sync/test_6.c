@@ -9,14 +9,15 @@ double foo(double* x, double* y){
 int main(){
   double a = 100;
   double b = 200;
-  double c[2];
+  double c[3];
   double ret;
 
-  c[0]=1;
-  c[1]=2;
   ret = foo(&a, &b)+foo(&a, &b);
 
-  printf("a=%lf, b=%lf, ret=%lf\n", a, b, ret);
+  c[0]=a;
+  c[1]=b;
+  c[2]=ret;
+  printf("c[0]=%lf, c[1]=%lf, c[2]=%lf\n", c[0], c[1], c[2]);
 
   return 0;
 }

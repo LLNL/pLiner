@@ -82,14 +82,16 @@ compile_and_compare(){
 
 
 ### test function transformation
-fail=0
-pass=0
+tfail=0
+tpass=0
+tnum=0
 echo -e "\ntesting pLiner - function transformation"
 for dir in $dirs; do
   echo "  $dir"
   cd $dir
   tests=`ls test_[0-9].c`
   for test in $tests; do
+    tnum=$((tnum+1))
     test=`echo $test | cut -d '.' -f 1`
     echo "    $test"
     whole_transformation $test
@@ -102,13 +104,13 @@ for dir in $dirs; do
     compile_and_compare $test.c ${test}_wholetrans.c  
     if [ $? -eq 0 ]; then
       echo -e "      - \e[32mcompile&compare completed\e[0m"
-      pass=$((pass+1))
+      tpass=$((tpass+1))
     else 
       echo -e "      - \e[31mcompile&compare failed\e[0m"
-      fail=$((fail+1))
+      tfail=$((tfail+1))
     fi
   done
   rm *_wholetrans.c
   cd ..
 done
-echo -e "\n  $fail tests failed; $pass tests pass"
+echo -e "\n  $tnum tests-- $tpass pass; $tfail failed"
