@@ -62,6 +62,13 @@ There are 2 options to build pLiner: (1) building pLiner as a standalone tool, (
   export PATH=$PATH-TO-CLANG-LLVM/build/bin:$PATH
   ```
 
+### Run optional unit tests 
+  ```
+  cd pLiner/tests
+  ./test.sh
+  ```
+  If pliner works as expected, all unit tests would pass.
+
 ## Using pLiner
 
 ### Example

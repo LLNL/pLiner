@@ -29,12 +29,14 @@ whole_transformation(){
   pLiner $test.c --po -- $compflags &>/dev/null
   if [ $? -ne 0 ]; then
     echo -e "\e[31mError: $test.c -- print function failed\e[0m"
+    pLiner $test.c --po -- $compflags
     clean
     return 1
   fi
   pLiner $test.c -r func-list.json --whole -o ${test}_wholetrans.c &>/dev/null -- $compflags
   if [ $? -ne 0 ]; then
     echo -e "\e[31mError: $test.c -- print function failed\e[0m"
+    pLiner $test.c -r func-list.json --whole -o ${test}_wholetrans.c -- $compflags
     clean
     return 2
   fi
