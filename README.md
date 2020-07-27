@@ -1,4 +1,5 @@
 # pLiner
+[![DOI](https://zenodo.org/badge/278142654.svg)](https://zenodo.org/badge/latestdoi/278142654)
 
 **pLiner** is a framework that helps programmers identify locations in the source of numerical code that are highly affected by floating-point compiler optimizations.  
 
