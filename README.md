@@ -1,17 +1,38 @@
 # pLiner
 
-**pLiner** is a framework that helps programmers identify locations in the source of numerical code that are highly affected by compiler optimizations.  
+**pLiner** is a framework that helps programmers identify locations in the source of numerical code that are highly affected by floating-point compiler optimizations.  
 
 Compiler optimizations can alter significantly the numerical results of scientific computing applications. When numerical results differ significantly between compilers, optimization levels, and floating-point hardware, these numerical inconsistencies can impact programming productivity. **pLiner** is a framework that helps programmers identify locations in the source code that are highly affected by compiler optimizations. **pLiner** uses a novel approach to identify such code locations by enhancing the floating-point precision of variables and expressions. Using a guided search to locate the most significant code regions, **pLiner** can report to users such locations at different granularities, file, function, and line of code.
 
 # Getting Started
 
 ## Requirements to use pLiner
-- pLiner is implemented as a clang tool. Installing clang/LLVM compiler is a prerequisite to use pLiner. So far, we have tested pLiner on clang/LLVM 9.0.1. Please follow the instructions below for building and installing clang/LLVM.
-- pLiner uses [nlohmann::json](https://github.com/nlohmann/json) to parse json files in C/C++. Download file `json.hpp` from [https://github.com/nlohmann/json/blob/develop/single_include/nlohmann/json.hpp](https://github.com/nlohmann/json/blob/develop/single_include/nlohmann/json.hpp) (version 3.5.0) and place it in the directory `pLiner-sc20/clang-tool` before using pLiner.
+- pLiner is implemented as a clang tool. Installing clang/LLVM compiler is a prerequisite to use pLiner. So far, we have tested pLiner on clang/LLVM 9.0.1. 
+- pLiner uses [nlohmann::json](https://github.com/nlohmann/json) to parse json files in C/C++. Download file `json.hpp` from [https://github.com/nlohmann/json/blob/develop/single_include/nlohmann/json.hpp](https://github.com/nlohmann/json/blob/develop/single_include/nlohmann/json.hpp) (version 3.5.0) and place it in the directory `pLiner/clang-tool` before using pLiner.
 - So far pLiner only supports C/C++.
 
-## Building clang/LLVM and pLiner
+## Building pLiner  
+There are 2 options to build pLiner: (1) building pLiner as a standalone tool, (2) building pLiner in the source tree of clang/LLVM 
+
+### Option 1: building pLiner as a standalone tool  
+  1. Clone pLiner and build it:  
+  ```
+  git clone https://github.com/llnl/pLiner.git
+  cd pLiner/clang-tool
+  mkdir build; cd build
+  cmake ..
+  make
+  ```
+  2. Install pLiner
+  ```
+  make install
+  ``` 
+  Or, export path to pLiner (this command may differ depending on shell):
+  ```
+  export PATH=$PATH-TO-pLiner/clang-tool/build:$PATH
+  ```
+
+### Option 2: building pLiner in the source tree of clang/LLVM  
   1. Building clang/LLVM 9.0.1:
   ```
   git clone https://github.com/llvm/llvm-project.git clang-llvm
@@ -30,8 +51,9 @@ Compiler optimizations can alter significantly the numerical results of scientif
   2. Clone pLiner in the clang-tools-extra directory and build it:
   ```
   cd ../clang-tools-extra
-  git clone https://github.com/ucd-plse/pLiner-sc20.git
-  echo "add_subdirectory(pLiner-sc20/clang-tool)" >> CMakeLists.txt
+  git clone https://github.com/llnl/pLiner.git
+  echo "add_subdirectory(pLiner/clang-tool)" >> CMakeLists.txt
+  cp pLiner/clang-tool/CMakeLists.txt-insource CMakeLists.txt
   cd ../build
   ninja
   ```
@@ -39,6 +61,13 @@ Compiler optimizations can alter significantly the numerical results of scientif
   ```
   export PATH=$PATH-TO-CLANG-LLVM/build/bin:$PATH
   ```
+
+### Run optional unit tests 
+  ```
+  cd pLiner/tests
+  ./test.sh
+  ```
+  If pliner works as expected, all unit tests would pass.
 
 ## Using pLiner
 
@@ -48,7 +77,7 @@ We use a simple C program `vtest.c` to show how to use pLiner. This program was 
 
   1. Change to the `example` directory:
   ```
-  cd ../clang-tools-extra/pLiner-sc20/example
+  cd pLiner/example
   ```
   
   2. Compile the original `vtest.c` program with both `gcc -O3 -ffast-math` and `gcc -O0`, and compare the results:
