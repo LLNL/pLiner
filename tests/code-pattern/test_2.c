@@ -1,3 +1,5 @@
+// code pattern: for-stmt
+
 #include<stdio.h>
 
 int main(){

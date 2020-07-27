@@ -1,3 +1,5 @@
+// code pattern: for-if-else
+
 #include<stdio.h>
 
 int main(){

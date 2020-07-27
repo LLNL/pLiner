@@ -1,3 +1,5 @@
+// data sync: foo(&c[0], &c[1])
+
 #include<stdio.h>
 
 void foo(double* x, double* y){

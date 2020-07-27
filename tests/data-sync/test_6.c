@@ -1,3 +1,5 @@
+// data sync: ret = foo(&a, &b)+foo(&a, &b);
+
 #include<stdio.h>
 
 double foo(double* x, double* y){

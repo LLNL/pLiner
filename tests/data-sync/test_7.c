@@ -1,3 +1,5 @@
+//data sync: ret = a>c[0]?foo(&c[0], &b):foo(&a, &b);
+
 #include<stdio.h>
 
 double foo(double* x, double* y){
