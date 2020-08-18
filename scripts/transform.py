@@ -14,7 +14,7 @@ def singlefiletrans():
 
   fglobal.obtain_funcs()
 
-  print "\n[fglobal.codefile]The following functions are transformed to high precision:"
+  print "\n[", fglobal.codefile, "]The following functions are transformed to high precision:"
   print fglobal.funclist
 
   status, out, err ="null", "null", "null"
