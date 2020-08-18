@@ -172,7 +172,7 @@ def print_and_exit(nlist):
       else:
         print "  line ", bstart 
 
-  #global fglobal.codefile, fglobal.funclist, fglobal.compileops, fglobal.logfile, fglobal.msgout
+  #global fglobal.codefile, fglobal.funclist, fglobal.compileops, fglobal.logfile, fglobal.verbose
   filesplits = fglobal.codefile.split(".")
 
   ## generate final region log file
@@ -188,7 +188,7 @@ def print_and_exit(nlist):
   status, out, err ="null", "null", "null"
   cmd = "pLiner "+fglobal.codefile+" -r="+filesplits[0]+"-regions.json -o="+outfile+" "+fglobal.compileops 
   FNULL = open(os.devnull, 'w')
-  if fglobal.msgout==1:  
+  if fglobal.verbose==1:  
     subprocess.call(cmd.split(' '))
   else:
     subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
@@ -197,7 +197,40 @@ def print_and_exit(nlist):
   cmd = "mv log.txt "+filesplits[0]+"-log.txt"
   subprocess.call(cmd.split(' '))
   
-  exit(0)
+  return outfile, filesplits[0]+"-regions.json", filesplits[0]+"-log.txt"
+
+def print_and_exit_whole(flist):
+  ## print bug area 
+  print "\n\n Bug area:"
+  print flist
+
+  #global fglobal.codefile, fglobal.funclist, fglobal.compileops, fglobal.logfile, fglobal.verbose
+  filesplits = fglobal.codefile.split(".")
+
+  ## generate final region log file
+  fout = open(filesplits[0]+"-regions.json", "w")
+  json.dump({"pLiner-funcs": flist}, fout, sort_keys=True, indent=2, separators=(',', ': '))
+  fout.close()
+  fglobal.logfile.close()
+
+  ## generate final transformated program
+  outfile=filesplits[0]+"_trans."+filesplits[1]
+  subprocess.call(['rm',  '-f', outfile])
+
+  status, out, err ="null", "null", "null"
+  cmd = "pLiner "+fglobal.codefile+" -r="+filesplits[0]+"-regions.json --whole -o="+outfile+" "+fglobal.compileops 
+  FNULL = open(os.devnull, 'w')
+  if fglobal.verbose==1:  
+    subprocess.call(cmd.split(' '))
+  else:
+    subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
+
+  ## save log file
+  cmd = "mv log.txt "+filesplits[0]+"-log.txt"
+  subprocess.call(cmd.split(' '))
+  
+  return outfile, filesplits[0]+"-regions.json", filesplits[0]+"-log.txt"
+
 
 def clean_and_exit():
   #global fglobal.codefile
@@ -210,67 +243,33 @@ def clean_and_exit():
   cmd = "mv log.txt "+filesplits[0]+"-log.txt"
   subprocess.call(cmd.split(' '))
  
-  exit(-1)
+  return None, None, filesplits[0]+"-log.txt"
 
-def obtain_funcs():
-  #global fglobal.codefile, fglobal.compileops, fglobal.msgout
+#def obtain_funcs():
+#  #global fglobal.codefile, fglobal.compileops, fglobal.verbose
+#
+#  status, out, err ="null", "null", "null"
+#  cmd = "pLiner "+fglobal.codefile+" -po "+fglobal.compileops
+#  FNULL = open(os.devnull, 'w')
+#  if fglobal.verbose==1:
+#    subprocess.call(cmd.split(' '))
+#  else:
+#    subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
+#
+#  ans=[]
+#  with open('func-list.json') as f:
+#    data = json.load(f)
+#    funcs = data['pLiner-funcs']
+#    for func in funcs:
+#      #if func=="initPointer" or func=="main" or func=="rUpdateQuadratureData" or func=="rUpdateQuadratureData3D": ## for Laghos and Varity tests
+#      #  continue
+#      ans.append(func)	
+#
+#  return ans  
 
-  status, out, err ="null", "null", "null"
-  cmd = "pLiner "+fglobal.codefile+" -po "+fglobal.compileops
-  FNULL = open(os.devnull, 'w')
-  if fglobal.msgout==1:
-    subprocess.call(cmd.split(' '))
-  else:
-    subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
-
-  ans=[]
-  with open('func-list.json') as f:
-    data = json.load(f)
-    funcs = data['pLiner-funcs']
-    for func in funcs:
-      #if func=="initPointer" or func=="main" or func=="rUpdateQuadratureData" or func=="rUpdateQuadratureData3D": ## for Laghos and Varity tests
-      #  continue
-      ans.append(func)	
-
-  return ans  
-
-
-if __name__=="__main__":
-  parser=argparse.ArgumentParser(description=
-  """pLiner -- search for the origin of compiler-induced inconsistency\r\n
-     arg1 : code file that may contain the origin of compiler-induced inconsistency 
-     arg2 : the compilation command followed by -- 
-   Optional argument list
-     arg3 : 0/1 to disable/enable verbose printing, 0 in default 
-  e.g., python search.py test.c "--" """, 
-  formatter_class=argparse.RawTextHelpFormatter)
-  if len(sys.argv)<3:
-    parser.print_help(sys.stderr)
-    sys.exit(1)
-  #args=parser.parse_args()
-
-  #global fglobal.msgout
-  #global fglobal.codefile, fglobal.funclist, fglobal.compileops
-  fglobal.codefile = sys.argv[1]
-  #fglobal.funclist = sys.argv[2].replace('[', ' ').replace(']', ' ').replace(',', ' ').split()
-  fglobal.compileops = sys.argv[2]
-  fglobal.msgout=0
-  if len(sys.argv)==4:
-    fglobal.msgout=int(sys.argv[3])
-  
+def search():
   ## obtain functions  
-  fglobal.funclist = obtain_funcs()
-  exclude=[]
-  if os.path.isfile('./exclude.json'):
-    with open('exclude.json') as f:
-      data = json.load(f)
-      if fglobal.codefile in data:
-        funcs = data[fglobal.codefile]
-        for func in funcs:
-          exclude.append(func)
-  
-  func2explore=[item for item in fglobal.funclist if item not in exclude]
-  fglobal.funclist = func2explore
+  fglobal.obtain_funcs()
 
   #global fglobal.logfile
   fglobal.logfile = open("log.txt", "w")
@@ -287,12 +286,10 @@ if __name__=="__main__":
   fout.close() 
   cmd = "pLiner "+fglobal.codefile+" -r pLiner-input.json -ao "+fglobal.compileops
   FNULL = open(os.devnull, 'w')
-  if fglobal.msgout==1:  
+  if fglobal.verbose==1:  
     subprocess.call(cmd.split(' '))
   else:
     subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
-
-
 
   forloops, bbs = {}, {}
   for funcname in fglobal.funclist:
@@ -350,9 +347,11 @@ if __name__=="__main__":
 
   if not bsuc:
     if lsuc:
-      print_and_exit(llist)
+      return True, print_and_exit(llist)
+    elif fsuc:
+      return True, print_and_exit_whole(flist)
     else:
-      clean_and_exit()
+      return False, clean_and_exit()
 
   ## search lines
   lines = {}
@@ -369,12 +368,45 @@ if __name__=="__main__":
 
   if not nsuc:
     if bsuc:
-      print_and_exit(bblist)
+      return True, print_and_exit(bblist)
     elif lsuc:
-      print_and_exit(llist)
+      return True, print_and_exit(llist)
+    elif fsuc:
+      return True, print_and_exit_whole(flist)
     else:
-      clean_and_exit()
+      return False, clean_and_exit()
 
-  print_and_exit(nlist)
+  return True, print_and_exit(nlist)
 
+if __name__=="__main__":
+  parser=argparse.ArgumentParser(description=
+  """pLiner -- search for the origin of compiler-induced inconsistency\r\n
+     arg1 : code file that may contain the origin of compiler-induced inconsistency 
+     arg2 : the compilation command followed by -- 
+   Optional argument list
+     arg3 : 0/1 to disable/enable verbose printing, 0 in default 
+  e.g., python search.py test.c "--" """, 
+  formatter_class=argparse.RawTextHelpFormatter)
+  if len(sys.argv)<3:
+    parser.print_help(sys.stderr)
+    sys.exit(1)
+  #args=parser.parse_args()
 
+  #global fglobal.verbose
+  #global fglobal.codefile, fglobal.funclist, fglobal.compileops
+  fglobal.codefile = sys.argv[1]
+  #fglobal.funclist = sys.argv[2].replace('[', ' ').replace(']', ' ').replace(',', ' ').split()
+  fglobal.compileops = sys.argv[2]
+  fglobal.verbose=0
+  if len(sys.argv)==4:
+    fglobal.verbose=int(sys.argv[3])
+  
+  suc, transfile, regionfile, logfile = search()
+  if suc:
+    print "\n\npLiner succeed."
+    print "See ", regionfile, "for the code regions in the original code that cause the inconsistency issue."
+    print "See ", transfile, " for the transformed code file."
+    print "See ", logfile, " for the search log"
+  else:
+    print "\n\npLiner failed to isolate the inconsisency."
+    print "See ", logfile, " for the search log"
