@@ -132,7 +132,8 @@ if __name__=="__main__":
     rest=filelist[:i]+filelist[i+1:]
     copy_to_trans(rest)
     fglobal.codefile = fl
-    suc, transfile, regionfile, logfile = search.search()
+    suc, results = search.search()
+    transfile, regionfile, logfile = results
     with open(logfile) as logfp: 
       loglines = logfp.readlines()
       for line in loglines:
@@ -144,6 +145,7 @@ if __name__=="__main__":
     copy_to_ori(rest)
 
   plogfile.close()
-  print "\n\npLiner succeed."
+  print "\n\npLiner succeeded."
+  print "Check out plog.txt for the search log"
   print "Check out the isolated regions and transformed files for the following code files:"
   print filelist      

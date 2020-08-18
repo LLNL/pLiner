@@ -42,6 +42,7 @@ def filerun(filedict, logfile):
   print "\nThe following files are transformed to high precision:"
   print filedict.keys()
 
+  comp, exect, const = False, False, False
   status, out, err = "null", "null", "null"
   ret = subprocess.call("./run.sh "+farg, shell=True, stdout=None, stderr=None)
   if ret==0:

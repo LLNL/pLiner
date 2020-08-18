@@ -400,13 +400,14 @@ if __name__=="__main__":
   fglobal.verbose=0
   if len(sys.argv)==4:
     fglobal.verbose=int(sys.argv[3])
-  
-  suc, transfile, regionfile, logfile = search()
+
+  suc, results = search()
+  transfile, regionfile, logfile = results
   if suc:
-    print "\n\npLiner succeed."
-    print "See ", regionfile, "for the code regions in the original code that cause the inconsistency issue."
-    print "See ", transfile, " for the transformed code file."
-    print "See ", logfile, " for the search log"
+    print "\n\npLiner succeeded."
+    print "Check out ", regionfile, "for the code regions in the original code that cause the inconsistency issue."
+    print "Check out ", transfile, " for the transformed code file."
+    print "Check out ", logfile, " for the search log"
   else:
     print "\n\npLiner failed to isolate the inconsisency."
-    print "See ", logfile, " for the search log"
+    print "Check out ", logfile, " for the search log"
