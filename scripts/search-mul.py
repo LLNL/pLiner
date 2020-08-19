@@ -134,6 +134,7 @@ if __name__=="__main__":
     fglobal.codefile = fl
     suc, results = search.search()
     transfile, regionfile, logfile = results
+    copy_to_ori(rest)
     with open(logfile) as logfp: 
       loglines = logfp.readlines()
       for line in loglines:
@@ -142,7 +143,6 @@ if __name__=="__main__":
       plogfile.close()
       clean_and_exit()
     pfile_trans[fl]=transfile
-    copy_to_ori(rest)
 
   plogfile.close()
   print "\n\npLiner succeeded."
