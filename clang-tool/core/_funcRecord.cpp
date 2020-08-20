@@ -155,7 +155,7 @@ void _funcRecord::processStmts(const Stmt* statement){
   }
 
   string type = statement->getStmtClassName();
-  Debug(llvm::errs() << " < to handled Statement: " << type << " , line " << line << "\n"); 
+  Debug(llvm::errs() << " < to handle Statement: " << type << " , line " << line << "\n"); 
   if (type == "ReturnStmt") {
     auto rs = dyn_cast<const ReturnStmt>(statement);
     processReturnStmt(rs, lRp);
@@ -793,6 +793,115 @@ void _funcRecord::transRegionSwitchStmt(Rewriter& TheRewriter, const SwitchStmt*
   llvm::errs() << "Incomplete function : transRegionSwitchStmt \n"; 
 }
 
+void _funcRecord::transRegionCallExprStmt(Rewriter& TheRewriter, const CallExpr* callep){
+  SourceLocation SL = callep->getExprLoc();
+  unsigned line = context->getFullLoc(SL).getSpellingLineNumber();
+
+  if (auto callee = dyn_cast<const clang::NamedDecl>(callep->getCalleeDecl())){
+    const string cname = callee->getNameAsString(); 
+    if (mathcalls.find(cname) == mathcalls.end())
+      llvm::errs() << "call expr (line " << line << " ): " << callee->getNameAsString() << "\n"; // non
+    else {
+      const string cname_ld = mathcalls.find(cname)->second;
+      TheRewriter.ReplaceText(callep->getExprLoc(), cname.length(), cname_ld);
+    }
+  }
+  for (const auto * epr : callep->arguments())
+    if (!isa<CXXDefaultArgExpr>(epr))
+      //wlist.push_back(epr->IgnoreParenImpCasts());
+      handleReads(TheRewriter, epr);
+
+  // handle variables that require data synchronization
+  handleRegionSyncs(TheRewriter, callep); 
+}
+
+void _funcRecord::handleRegionSyncs(Rewriter& TheRewriter, const Stmt* statement){
+  //SourceLocation SL = statement->getExprLoc();
+  SourceLocation SL = statement->getSourceRange().getBegin();
+  unsigned line = context->getFullLoc(SL).getSpellingLineNumber();
+
+  _lineRecord* lrd = lineRs[line];
+  if (lrd->syncs.size()==0)
+    return;
+
+  SourceRange range = statement->getSourceRange();
+  unsigned int currNo = 0; 
+  map<const VarDecl*, unsigned int> vSync;
+  stringstream synEntry, synExit;
+  synEntry << "{"; 
+  for (const auto * svar : lrd->syncs){
+    SourceLocation loc = svar->getExprLoc();
+    string name = svar->getNameInfo().getAsString();
+    if (loc<range.getBegin()||range.getEnd()<loc)
+      continue; 
+
+    //if (isa<ArraySubscriptExpr>(svar))
+    //  continue;
+
+    const VarDecl* sd = dyn_cast<VarDecl>(svar->getDecl());
+    const clang::Type* ty= sd->getType().getTypePtr();
+    if (!isDouble(ty, context))
+      continue;
+
+    string mytmp; 
+    string suffix= "_"+to_string(regLstart)+"_"+to_string(regLend);
+    if (vSync.find(sd)==vSync.end()){
+      currNo += 1;
+      vSync[sd] = currNo;
+      mytmp = "tmp"+suffix+ to_string(currNo); 
+      synEntry << mytmp << "=" << name << ";";
+      synExit << name << "=" << mytmp << ";";
+    }
+    mytmp = "tmp"+ suffix+ to_string(vSync.find(sd)->second); 
+    TheRewriter.ReplaceText(loc, name.length(), mytmp);
+  }
+  TheRewriter.InsertTextBefore(range.getBegin(), synEntry.str());
+  //TheRewriter.InsertTextAfter(range.getEnd(), synExit.str());
+ 
+  synExit << "}";
+  SourceLocation exitSL = range.getEnd();
+  unsigned exitLine = context->getFullLoc(exitSL).getSpellingLineNumber();
+  unsigned off=0;
+
+  if (const auto * bop = dyn_cast<BinaryOperator>(statement)){ 
+    const clang::Expr* epr=bop->getRHS()->IgnoreImpCasts(); 
+    //llvm::errs() << "---DEBUG : checking for binary operators.\n"; 
+    while(true){
+      if (auto bop = dyn_cast<BinaryOperator>(epr)){
+        epr = bop->getRHS()->IgnoreImpCasts();
+      }else if (auto cop = dyn_cast<ConditionalOperator>(epr)){
+        epr = cop->getFalseExpr()->IgnoreImpCasts();
+      }else if (auto uop = dyn_cast<UnaryOperator>(epr)){
+        epr = uop->getSubExpr()->IgnoreImpCasts();
+      }else if (auto readV = dyn_cast<DeclRefExpr>(epr)){
+        off = readV->getNameInfo().getAsString().length();
+        //llvm::errs() << "---DEBUG INFO:" << readV->getNameInfo().getAsString() << " on line" << exitLine <<"\n"; 
+        break;
+      }else if (auto intL = dyn_cast<IntegerLiteral>(epr)){
+        //exitSL = intL->getEndLoc(); off=1;
+        off=1; // for Laghos and varity tests
+        break;
+      }else if (auto fltL = dyn_cast<FloatingLiteral>(epr)){
+        //llvm::SmallVector<char, 32> fltStr;
+        //fltL->getValue().toString(fltStr, 32, true);   
+        //llvm::errs() << "---DEBUG : float number " << fltStr << "(" << fltStr.size() <<").\n"; 
+        //exitSL = fltL->getEndLoc(); off=1;
+        off=11; // for Laghos and varity tests
+        break;
+      }else if (auto prt = dyn_cast<ParenExpr>(epr)){
+        off = 1;
+        break;
+      } else {
+        off = 1;
+        break;
+      }
+    }
+  }
+
+  //while(exitSL.getLocWithOffset(off).printToString(context->getSourceManager())!=";") off++; 
+  TheRewriter.InsertText(exitSL.getLocWithOffset(off+2), synExit.str(), true, true);
+}
+
 void _funcRecord::transRegionStmts(Rewriter& TheRewriter, const Stmt* statement){
   if (insertExit)
     return;
@@ -901,7 +1010,8 @@ void _funcRecord::transRegionStmts(Rewriter& TheRewriter, const Stmt* statement)
       transRegionStmts(TheRewriter, child);
   } else if (type == "CallExpr") {
     auto callep = dyn_cast<CallExpr>(statement);
-    transWholeCallExprStmt(TheRewriter, callep);
+    Debug(llvm::errs() << "call RegionCallExpr on line " << line << "\n");
+    transRegionCallExprStmt(TheRewriter, callep);
   } else {
     llvm::errs() << "Unhandled Statement: " << type << " , line " << line << "\n"; 
   } 
@@ -910,6 +1020,7 @@ void _funcRecord::transRegionStmts(Rewriter& TheRewriter, const Stmt* statement)
 void _funcRecord::transRegion(unsigned lstart, unsigned lend, Rewriter& TheRewriter){
   outs() << "region transformation" << " <" << lstart << ", " << lend << ">\n";
   typeTransTo = "long double";
+  //typeTransTo = "__float128";
   regLstart = lstart; regLend = lend;
   newFPDels.clear();
   regEntry.str(""); regExit.str("");
@@ -1261,6 +1372,7 @@ void _funcRecord::transWholeStmts(Rewriter& TheRewriter, const Stmt* statement){
  
 void _funcRecord::transWhole(Rewriter& TheRewriter){
   typeTransTo = "long double";
+  //typeTransTo = "__float128";
   newFPDels.clear();
 
   // add global temporary variables; 

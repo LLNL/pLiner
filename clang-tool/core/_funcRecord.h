@@ -60,8 +60,8 @@ private:
 
   void handleFPParameters(Rewriter& TheRewriter);
   void handleReads(Rewriter& TheRewriter, const clang::Expr* epr);
-  void handleWholeSyncs(Rewriter& TheRewriter, const Stmt* statement);
 
+  void handleWholeSyncs(Rewriter& TheRewriter, const Stmt* statement);
   void transWholeStmts(Rewriter& TheRewriter, const Stmt* st);
   void transWholeReturnStmt(Rewriter& TheRewriter, const ReturnStmt* rst);
   void transWholeWhileStmt(Rewriter& TheRewriter, const WhileStmt* wst);
@@ -73,12 +73,15 @@ private:
   void transWholeCompoundAOpStmt(Rewriter& TheRewriter, const CompoundAssignOperator* comast);
   void transWholeCallExprStmt(Rewriter& TheRewriter, const CallExpr* callep);
   
+  void handleRegionSyncs(Rewriter& TheRewriter, const Stmt* statement);
   void handleRegionEE(unsigned lstart, unsigned lend, Rewriter& TheRewriter);
+
   void transRegionStmts(Rewriter& TheRewriter, const Stmt* st);
   void transRegionDeclStmt(Rewriter& TheRewriter, const DeclStmt* delst);
   void transRegionWhileStmt(Rewriter& TheRewriter, const WhileStmt* wst);
   void transRegionForStmt(Rewriter& TheRewriter, const ForStmt* forst);
   void transRegionIfStmt(Rewriter& TheRewriter, const IfStmt* ifst);
   void transRegionSwitchStmt(Rewriter& TheRewriter, const SwitchStmt* swst);
+  void transRegionCallExprStmt(Rewriter& TheRewriter, const CallExpr* callep);
 
 };
