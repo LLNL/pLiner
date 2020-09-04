@@ -1,0 +1,11 @@
+{
+    "pLiner-funcs": [
+        "main",
+        "conj_grad",
+        "makea",
+        "sparse",
+        "sprnvc",
+        "icnvrt",
+        "vecset"
+    ]
+}

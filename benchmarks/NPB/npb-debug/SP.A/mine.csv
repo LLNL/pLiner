@@ -1,0 +1,13 @@
+add.c
+adi.c
+ninvr.c
+pinvr.c
+rhs.c
+sp.c
+txinvr.c
+tzetar.c
+x_solve.c
+y_solve.c
+z_solve.c
+exact_rhs.c
+exact_solution.c
