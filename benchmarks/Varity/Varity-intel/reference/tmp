@@ -1,0 +1,106 @@
+** Creating funcPrint AST consumer for: /home/huiguo15/varity/test_9.c
+** function 1 : compute, in file /home/huiguo15/varity/test_9.c
+** function 2 : initPointer, in file /home/huiguo15/varity/test_9.c
+** function 3 : main, in file /home/huiguo15/varity/test_9.c
+** End funcPrint Action for: /home/huiguo15/varity/test_9.c
+** Creating funcTrans AST consumer for: /home/huiguo15/varity/test_9.c
+
+** function 1 : compute
+** End funcTrans Action for: /home/huiguo15/varity/test_9.c
+/usr/bin/gcc -o test_9_trans_O0 -O0  -g -std=c99 test_9_trans.c -lm
+/usr/bin/gcc -o test_9_trans_O3 -O3 -ffast-math  -g -std=c99 test_9_trans.c -lm
+./test_9_trans_O0 +1.9025E-318 +0.0 +1.1573E158 +0.0 +1.1332E215 -1.4071E-69 +1.7994E-286 +1.7499E305
+./test_9_trans_O3 +1.9025E-318 +0.0 +1.1573E158 +0.0 +1.1332E215 -1.4071E-69 +1.7994E-286 +1.7499E305
+** Creating funcAnalysis AST consumer for: /home/huiguo15/varity/test_9.c
+
+** function 1 : compute
+** End funcAnalysis Action for: /home/huiguo15/varity/test_9.c
+** Creating funcTrans AST consumer for: /home/huiguo15/varity/test_9.c
+
+** function 1 : compute
+** End funcTrans Action for: /home/huiguo15/varity/test_9.c
+/usr/bin/gcc -o test_9_trans_O0 -O0  -g -std=c99 test_9_trans.c -lm
+/usr/bin/gcc -o test_9_trans_O3 -O3 -ffast-math  -g -std=c99 test_9_trans.c -lm
+./test_9_trans_O0 +1.9025E-318 +0.0 +1.1573E158 +0.0 +1.1332E215 -1.4071E-69 +1.7994E-286 +1.7499E305
+./test_9_trans_O3 +1.9025E-318 +0.0 +1.1573E158 +0.0 +1.1332E215 -1.4071E-69 +1.7994E-286 +1.7499E305
+** Creating funcTrans AST consumer for: /home/huiguo15/varity/test_9.c
+
+** function 1 : compute
+region transformation <12, 12>
+region transformation <13, 13>
+region transformation <14, 14>
+region transformation <15, 15>
+region transformation <18, 18>
+** End funcTrans Action for: /home/huiguo15/varity/test_9.c
+/usr/bin/gcc -o test_9_trans_O0 -O0  -g -std=c99 test_9_trans.c -lm
+/usr/bin/gcc -o test_9_trans_O3 -O3 -ffast-math  -g -std=c99 test_9_trans.c -lm
+./test_9_trans_O0 +1.9025E-318 +0.0 +1.1573E158 +0.0 +1.1332E215 -1.4071E-69 +1.7994E-286 +1.7499E305
+./test_9_trans_O3 +1.9025E-318 +0.0 +1.1573E158 +0.0 +1.1332E215 -1.4071E-69 +1.7994E-286 +1.7499E305
+** Creating funcTrans AST consumer for: /home/huiguo15/varity/test_9.c
+
+** function 1 : compute
+region transformation <12, 12>
+region transformation <13, 13>
+** End funcTrans Action for: /home/huiguo15/varity/test_9.c
+/usr/bin/gcc -o test_9_trans_O0 -O0  -g -std=c99 test_9_trans.c -lm
+/usr/bin/gcc -o test_9_trans_O3 -O3 -ffast-math  -g -std=c99 test_9_trans.c -lm
+./test_9_trans_O0 +1.9025E-318 +0.0 +1.1573E158 +0.0 +1.1332E215 -1.4071E-69 +1.7994E-286 +1.7499E305
+./test_9_trans_O3 +1.9025E-318 +0.0 +1.1573E158 +0.0 +1.1332E215 -1.4071E-69 +1.7994E-286 +1.7499E305
+** Creating funcTrans AST consumer for: /home/huiguo15/varity/test_9.c
+
+** function 1 : compute
+region transformation <12, 12>
+** End funcTrans Action for: /home/huiguo15/varity/test_9.c
+/usr/bin/gcc -o test_9_trans_O0 -O0  -g -std=c99 test_9_trans.c -lm
+/usr/bin/gcc -o test_9_trans_O3 -O3 -ffast-math  -g -std=c99 test_9_trans.c -lm
+./test_9_trans_O0 +1.9025E-318 +0.0 +1.1573E158 +0.0 +1.1332E215 -1.4071E-69 +1.7994E-286 +1.7499E305
+./test_9_trans_O3 +1.9025E-318 +0.0 +1.1573E158 +0.0 +1.1332E215 -1.4071E-69 +1.7994E-286 +1.7499E305
+** Creating funcTrans AST consumer for: /home/huiguo15/varity/test_9.c
+
+** function 1 : compute
+region transformation <12, 12>
+** End funcTrans Action for: /home/huiguo15/varity/test_9.c
+/usr/bin/gcc -o test_9_trans_O0 -O0  -g -std=c99 test_9_trans.c -lm
+/usr/bin/gcc -o test_9_trans_O3 -O3 -ffast-math  -g -std=c99 test_9_trans.c -lm
+./test_9_trans_O0 +1.9025E-318 +0.0 +1.1573E158 +0.0 +1.1332E215 -1.4071E-69 +1.7994E-286 +1.7499E305
+./test_9_trans_O3 +1.9025E-318 +0.0 +1.1573E158 +0.0 +1.1332E215 -1.4071E-69 +1.7994E-286 +1.7499E305
+** Creating funcTrans AST consumer for: /home/huiguo15/varity/test_9.c
+
+** function 1 : compute
+region transformation <12, 12>
+** End funcTrans Action for: /home/huiguo15/varity/test_9.c
+Search for functions:
+success
+Search for loops:
+The following areas are transformed to high precision:
+compute :
+failed
+transforming for loops does not fix the bug
+Search for bbs:
+The following areas are transformed to high precision:
+compute :
+   12 -> 12
+   13 -> 13
+   14 -> 14
+   15 -> 15
+   18 -> 18
+success
+The following areas are transformed to high precision:
+compute :
+   12 -> 12
+   13 -> 13
+success
+The following areas are transformed to high precision:
+compute :
+   12 -> 12
+success
+Search for lines:
+The following areas are transformed to high precision:
+compute :
+   12 -> 12
+success
+
+
+ Bug area:
+compute :
+  line  12

@@ -1,0 +1,29 @@
+Output @ test_23.c:23 in compute (addr 400883)
+64.000000 bits average error
+64.000000 bits max error
+Aggregated over 1 instances
+Influenced by erroneous expression:
+
+    (FPCore ()
+          (- -1.007700e-316 (/ 1.139700e-307 (atan (+ (sqrt 1.798100e-317) (/ +inf.0 0.000000))))))
+   test_23.c:18 in compute (addr 40082B)
+   64.000000 bits average error
+   64.000000 bits max error
+   64.000000 bits average local error
+   64.000000 bits max local error
+   Aggregated over 125 instances
+
+compare @ test_23.c:15 in compute (addr 4007A6)
+99% incorrect
+124 incorrect values
+125 total instances
+Influenced by erroneous expressions:
+
+    (FPCore ()
+          (- -1.007700e-316 (/ 1.139700e-307 (atan (+ (sqrt 1.798100e-317) (/ +inf.0 0.000000))))))
+   test_23.c:18 in compute (addr 40082B)
+   64.000000 bits average error
+   64.000000 bits max error
+   64.000000 bits average local error
+   64.000000 bits max local error
+   Aggregated over 125 instances

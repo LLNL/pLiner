@@ -1,0 +1,37 @@
+Output @ test_40.c:16 in compute (addr 400899)
+0.000000 bits average error
+0.000000 bits max error
+Aggregated over 1 instances
+Influenced by erroneous expression:
+
+No influences found!
+
+
+compare @ test_40.c:13 in compute (addr 400857)
+100% incorrect
+1 incorrect values
+1 total instances
+Influenced by erroneous expressions:
+
+    (FPCore ()
+          (/ 1.307000e-306 (/ 1.128400e-24 (- (/ -1.014500e204 -1.233700e306) (floor (+ 1.652000e193 -1.661700e305))))))
+   test_40.c:13 in compute (addr 40084F)
+   64.000000 bits average error
+   64.000000 bits max error
+   64.000000 bits average local error
+   64.000000 bits max local error
+   Aggregated over 1 instances
+compare @ test_40.c:13 in compute (addr 40085E)
+100% incorrect
+1 incorrect values
+1 total instances
+Influenced by erroneous expressions:
+
+    (FPCore ()
+          (/ 1.307000e-306 (/ 1.128400e-24 (- (/ -1.014500e204 -1.233700e306) (floor (+ 1.652000e193 -1.661700e305))))))
+   test_40.c:13 in compute (addr 40084F)
+   64.000000 bits average error
+   64.000000 bits max error
+   64.000000 bits average local error
+   64.000000 bits max local error
+   Aggregated over 1 instances

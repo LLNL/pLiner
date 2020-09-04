@@ -1,0 +1,12 @@
+FUNCTIONs: [u'compute'], success, -1.2991e+306, -1.2991e+306
+LOOPs: {u'compute': [[13, 15], [16, 20], [21, 26]]}, success, -2.1159549599979016e-13, -2.1159549599979016e-13
+LOOPs: {u'compute': [[13, 15]]}, failed, null, null
+LOOPs: {u'compute': [[16, 20], [21, 26]]}, success, -2.1159549599979016e-13, -2.1159549599979016e-13
+LOOPs: {u'compute': [[16, 20]]}, failed, null, null
+LOOPs: {u'compute': [[21, 26]]}, success, -2.1159549599979016e-13, -2.1159549599979016e-13
+BBs: {u'compute': [[21, 21], [22, 24], [25, 25]]}, success, -2.1159549599979016e-13, -2.1159549599979016e-13
+BBs: {u'compute': [[21, 21]]}, failed, null, null
+BBs: {u'compute': [[22, 24], [25, 25]]}, success, -2.1159549599979016e-13, -2.1159549599979016e-13
+BBs: {u'compute': [[22, 24]]}, failed, null, null
+BBs: {u'compute': [[25, 25]]}, success, -2.1159549599979016e-13, -2.1159549599979016e-13
+LINEs: {u'compute': [[25, 25]]}, success, -2.1159549599979016e-13, -2.1159549599979016e-13

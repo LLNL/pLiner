@@ -1,0 +1,15 @@
+Output @ test_19.c:14 in compute (addr 4007EB)
+13.387075 bits average error
+13.387075 bits max error
+Aggregated over 1 instances
+Influenced by erroneous expression:
+
+    (FPCore ()
+          (/ -1.674162e-279 (/ -1.435400e-306 -1.369600e6)))
+   test_19.c:13 in compute (addr 4007C3)
+   13.387075 bits average error
+   13.387075 bits max error
+   13.387075 bits average local error
+   13.387075 bits max local error
+   Aggregated over 1 instances
+

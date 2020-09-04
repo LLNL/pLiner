@@ -1,0 +1,8 @@
+compare @ test_34.c:22 in main (addr 40071B)
+100% incorrect
+1 incorrect values
+1 total instances
+Influenced by erroneous expressions:
+
+No influences found!
+

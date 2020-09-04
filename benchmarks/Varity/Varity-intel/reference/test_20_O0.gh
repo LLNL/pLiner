@@ -1,0 +1,9 @@
+Output @ test_20.c:20 in compute (addr 4008BA)
+1.000000 bits average error
+1.000000 bits max error
+Aggregated over 1 instances
+Influenced by erroneous expression:
+
+No influences found!
+
+
