@@ -41,8 +41,8 @@ public:
   void processLines();
   void printFuncRecord(string filename);
 
-  void transRegion(unsigned lstart, unsigned lend, Rewriter& TheRewriter);
-  void transWhole(Rewriter& TheRewriter);
+  void transRegion(unsigned lstart, unsigned lend, Rewriter& TheRewriter, string myReal);
+  void transWhole(Rewriter& TheRewriter, string myReal);
 
 private:
   void processForLoops(const Stmt* st);

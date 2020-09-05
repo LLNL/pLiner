@@ -1017,10 +1017,11 @@ void _funcRecord::transRegionStmts(Rewriter& TheRewriter, const Stmt* statement)
   } 
 
 }
-void _funcRecord::transRegion(unsigned lstart, unsigned lend, Rewriter& TheRewriter){
+void _funcRecord::transRegion(unsigned lstart, unsigned lend, Rewriter& TheRewriter, string myReal){
   outs() << "region transformation" << " <" << lstart << ", " << lend << ">\n";
-  typeTransTo = "long double";
+  //typeTransTo = "long double";
   //typeTransTo = "__float128";
+  typeTransTo = myReal;
   regLstart = lstart; regLend = lend;
   newFPDels.clear();
   regEntry.str(""); regExit.str("");
@@ -1370,9 +1371,10 @@ void _funcRecord::transWholeStmts(Rewriter& TheRewriter, const Stmt* statement){
 
 }
  
-void _funcRecord::transWhole(Rewriter& TheRewriter){
-  typeTransTo = "long double";
+void _funcRecord::transWhole(Rewriter& TheRewriter, string myReal){
+  //typeTransTo = "long double";
   //typeTransTo = "__float128";
+  typeTransTo = myReal;
   newFPDels.clear();
 
   // add global temporary variables; 
