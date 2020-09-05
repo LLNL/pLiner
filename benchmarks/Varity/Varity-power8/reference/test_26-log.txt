@@ -1,0 +1,10 @@
+LOOPs: [[18, 27]], success, inf, inf
+LOOPs: [[22, 26]], success, inf, inf
+BBs: [[22, 21], [22, 22], [23, 24], [25, 25]], success, inf, inf
+BBs: [[22, 21], [22, 22]], failed, null, null
+BBs: [[23, 24], [25, 25]], success, inf, inf
+BBs: [[23, 24]], failed, null, null
+BBs: [[25, 25]], failed, null, null
+LINEs: [[23, 23], [24, 24], [25, 25]], success, inf, inf
+LINEs: [[23, 23]], failed, null, null
+LINEs: [[24, 24], [25, 25]], failed, null, null

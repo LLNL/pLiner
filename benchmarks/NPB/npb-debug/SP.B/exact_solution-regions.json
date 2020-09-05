@@ -1,0 +1,13 @@
+{
+  "pLiner-fregions": {
+    "exact_solution": [
+      [
+        44,
+        44
+      ]
+    ]
+  },
+  "pLiner-funcs": [
+    "exact_solution"
+  ]
+}

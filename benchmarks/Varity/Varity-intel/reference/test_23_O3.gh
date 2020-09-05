@@ -1,0 +1,24 @@
+compare @ test_23.c:18 in compute (addr 4008F3)
+100% incorrect
+25 incorrect values
+25 total instances
+Influenced by erroneous expressions:
+
+No influences found!
+
+compare @ test_23.c:18 in compute (addr 400900)
+100% incorrect
+50 incorrect values
+50 total instances
+Influenced by erroneous expressions:
+
+No influences found!
+
+compare @ test_23.c:14 in compute (addr 400922)
+100% incorrect
+50 incorrect values
+50 total instances
+Influenced by erroneous expressions:
+
+No influences found!
+

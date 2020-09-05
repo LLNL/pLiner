@@ -1,0 +1,7 @@
+LOOPs: [], failed, null, null
+BBs: [[18, 17], [18, 18], [19, 19], [21, 21]], success, -0.0013508444125044853, -0.0013508444125044853
+BBs: [[18, 17], [18, 18]], failed, null, null
+BBs: [[19, 19], [21, 21]], failed, null, null
+LINEs: [[18, 18], [19, 19], [21, 21]], success, -0.0013508444125044853, -0.0013508444125044853
+LINEs: [[18, 18]], failed, null, null
+LINEs: [[19, 19], [21, 21]], failed, null, null

@@ -1,0 +1,8 @@
+compare @ test_14.c:18 in compute (addr 400CFE)
+100% incorrect
+25 incorrect values
+25 total instances
+Influenced by erroneous expressions:
+
+No influences found!
+

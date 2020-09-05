@@ -1,0 +1,6 @@
+LOOPs: [], failed, null, null
+BBs: [[16, 19]], success, -inf, -inf
+LINEs: [[16, 16], [17, 17], [18, 18], [19, 19]], success, -inf, -inf
+LINEs: [[16, 16], [17, 17]], failed, null, null
+LINEs: [[18, 18], [19, 19]], success, -inf, -inf
+LINEs: [[18, 18]], success, -inf, -inf
