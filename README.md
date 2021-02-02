@@ -7,11 +7,11 @@ Compiler optimizations can alter significantly the numerical results of scientif
 
 # Getting Started
 
-## Requirements to use pLiner
-- Docker client needs to be installed before starting to setup pLiner.
-
 ## pLiner setup  
-There are 2 options to start using pLiner: (1) Download the docker image from DockerHub and run the container, (2) Building the docker image from the Dockerfile and then run the container.
+There are 4 options to start using pLiner: (1) Download the docker image from DockerHub and run the container,(2) Building the docker image through dockerfile and running the container(3) building pLiner as a standalone tool, (4) building pLiner in the source tree of clang/LLVM
+
+## Requirements to use pLiner as a docker container
+- Docker client needs to be installed before starting to setup pLiner using option 1 and 2.
 
 ### Option 1: Download the docker image from DockerHub and run the container.  
   1. Download the docker image from DockerHub:
@@ -23,21 +23,72 @@ There are 2 options to start using pLiner: (1) Download the docker image from Do
   docker run -it ucdavisplse/llnl_pliner:latest /bin/bash
   ```
   
-### Option 2: building the docker image from the DockerFile and running the docker container
-  1. Clone pLiner:  
+### Option 2: Building the docker image through dockerfile and running the container
+
+  1. Clone the pLiner github repo
   ```
   git clone https://github.com/llnl/pLiner.git
   ```
-  2. Build the docker image from the Docker file
+  2. Building the docker image from dockerfile:
   ```
   cd pLiner
   docker build -t <tag-name> .
   ```
-  Note: The last step in the docker file would be to run unit tests. pLiner will work as expected if all the tests pass.
-  
-  3. Run the docker container
+  2. Run the docker container
   ```
   docker run -it <tag-name> /bin/bash
+  ```
+
+## Requirements to use pLiner through manual setup(Option3 or Option 4).
+- Installing clang/LLVM compiler is a prerequisite to use pLiner. So far, we have tested pLiner on clang/LLVM 9.0.1. 
+- pLiner uses [nlohmann::json](https://github.com/nlohmann/json) to parse json files in C/C++. Download file `json.hpp` from [https://github.com/nlohmann/json/blob/develop/single_include/nlohmann/json.hpp](https://github.com/nlohmann/json/blob/develop/single_include/nlohmann/json.hpp) (version 3.5.0) and place it in the directory `pLiner/clang-tool` before using pLiner.
+- So far pLiner only supports C/C++.
+  
+### Option 3: building pLiner as a standalone tool  
+  1. Clone pLiner and build it:  
+  ```
+  git clone https://github.com/llnl/pLiner.git
+  cd pLiner/clang-tool
+  mkdir build; cd build
+  cmake ..
+  make
+  ```
+  2. Install pLiner
+  ```
+  make install
+  ``` 
+  Or, export path to pLiner (this command may differ depending on shell):
+  ```
+  export PATH=$PATH-TO-pLiner/clang-tool/build:$PATH
+  ```
+  ### Option 4: building pLiner in the source tree of clang/LLVM  
+  1. Building clang/LLVM 9.0.1:
+  ```
+  git clone https://github.com/llvm/llvm-project.git clang-llvm
+  git checkout llvmorg-9.0.1
+  cd ~/clang-llvm
+  mkdir build && cd build
+  cmake -G Ninja ../llvm -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra" -DLLVM_BUILD_TESTS=ON
+  ninja
+  ninja check       # Test LLVM only.
+  ninja clang-test  # Test Clang only.
+  ninja install
+  ```
+
+  Note: Refer to https://clang.llvm.org/docs/LibASTMatchersTutorial.html in case you need instructions for installing `cmake` and/or `ninja`.
+  
+  2. Clone pLiner in the clang-tools-extra directory and build it:
+  ```
+  cd ../clang-tools-extra
+  git clone https://github.com/llnl/pLiner.git
+  echo "add_subdirectory(pLiner/clang-tool)" >> CMakeLists.txt
+  cp pLiner/clang-tool/CMakeLists.txt-insource CMakeLists.txt
+  cd ../build
+  ninja
+  ```
+  3. Export path to pLiner (this command may differ depending on shell):
+  ```
+  export PATH=$PATH-TO-CLANG-LLVM/build/bin:$PATH
   ```
 
 
