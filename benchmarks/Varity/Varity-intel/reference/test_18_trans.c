@@ -9,7 +9,7 @@
 #include <math.h>
 
 void compute(double comp, double var_1,double var_2,double var_3,double var_4,double var_5,double var_6,int var_7,double var_8,double* var_9,double var_10) {
-if ((long double)comp < +1.1623E305 - ((long double)var_1 / powl(((long double)var_2 / expl(+1.5102E305 * atanl(+1.6137E305 - (long double)var_3 / (long double)var_4))), (long double)var_5 * +1.8179E-123 + (long double)var_6))) {
+if (comp < +1.1623E305 - (var_1 / pow((var_2 / exp(+1.5102E305 * atan(+1.6137E305 - var_3 / var_4))), var_5 * +1.8179E-123 + var_6))) {
   comp = log(-1.4588E-61 + var_8);
 for (int i=0; i < var_7; ++i) {
   var_9[i] = +1.1917E133;

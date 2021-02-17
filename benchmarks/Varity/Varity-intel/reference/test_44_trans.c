@@ -12,9 +12,9 @@ void compute(double comp, int var_1,int var_2,double var_3,double var_4,double v
 for (int i=0; i < var_1; ++i) {
   if ((long double)comp > (-1.0504E-306 * ((long double)var_3 * (long double)var_4))) {
     for (int i=0; i < var_2; ++i) {
-      long double tmp_1_12_20_H = tanh(sqrt(var_5 * var_6 / var_7 * -1.7260E96));
-comp = tmp_1_12_20_H * (long double)var_8 - +0.0;
-comp = (+1.7213E306 + (+0.0 - (long double)var_9 - -1.1113E-71));
+      double tmp_1 = tanh(sqrt(var_5 * var_6 / var_7 * -1.7260E96));
+comp = tmp_1 * var_8 - +0.0;
+comp = (+1.7213E306 + (+0.0 - var_9 - -1.1113E-71));
 }
 }
 }

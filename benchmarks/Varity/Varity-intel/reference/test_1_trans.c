@@ -9,10 +9,10 @@
 #include <math.h>
 
 void compute(double comp, int var_1,int var_2,double var_3) {
+long double comp_12_16_H = comp;
 for (int i=0; i < var_1; ++i) {
-  long double comp_13_15_H = comp;
   for (int i=0; i < var_2; ++i) {
-    comp_13_15_H += ((long double)var_3 / -1.2309E-151);comp = comp_13_15_H;
+    comp_12_16_H += ((long double)var_3 / -1.2309E-151);comp = comp_12_16_H;
     
 }
 }
