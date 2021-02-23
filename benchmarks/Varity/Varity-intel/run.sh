@@ -29,7 +29,7 @@ echo $result >> runlog.txt
 
 #err=`echo "scale=11; ($result-$ans)/$ans" | bc -q`
 if [ "$ans" == "$result" -a "$ans" != "" ]; then
-  false ## false=1 success
+  exit 0 ##  success
 else
-  true ## true=0 failed
+  exit 3 ##  failed
 fi
