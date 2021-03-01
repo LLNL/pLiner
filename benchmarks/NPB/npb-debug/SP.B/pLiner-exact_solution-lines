@@ -1,0 +1,23 @@
+{
+  41 : {
+    "vDels" : [],
+    "reads" : [],
+    "writes" : [],
+    "calls" : [],
+    "syncs" : []
+  }
+  43 : {
+    "vDels" : [],
+    "reads" : [],
+    "writes" : [],
+    "calls" : [],
+    "syncs" : []
+  }
+  44 : {
+    "vDels" : [],
+    "reads" : [ "zeta", "zeta", "zeta", "zeta", "eta", "eta", "eta", "eta", "xi", "xi", "xi", "xi"],
+    "writes" : [ "dtemp"],
+    "calls" : [],
+    "syncs" : []
+  }
+}

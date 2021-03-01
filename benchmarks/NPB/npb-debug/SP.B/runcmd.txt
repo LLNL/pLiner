@@ -1,0 +1,1 @@
+time python ../../../pLiner/scripts/search-mul.py mine.csv "-- -c -I../common -g -Wall -O3 -mcmodel=medium -ffast-math"

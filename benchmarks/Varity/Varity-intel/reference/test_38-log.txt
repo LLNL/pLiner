@@ -1,0 +1,11 @@
+FUNCTIONs: [u'compute'], success, -0, -0
+LOOPs: {u'compute': []}, failed, null, null
+BBs: {u'compute': [[12, 12], [13, 15], [16, 16], [17, 17], [20, 20]]}, success, 1.5833154521256047e-30, 1.5833154521256047e-30
+BBs: {u'compute': [[12, 12], [13, 15]]}, success, 1.5833154521256047e-30, 1.5833154521256047e-30
+BBs: {u'compute': [[12, 12]]}, failed, null, null
+BBs: {u'compute': [[13, 15]]}, success, 1.5833154521256047e-30, 1.5833154521256047e-30
+LINEs: {u'compute': [[13, 13], [14, 14], [15, 15]]}, success, 1.5833154521256047e-30, 1.5833154521256047e-30
+LINEs: {u'compute': [[13, 13]]}, failed, null, null
+LINEs: {u'compute': [[14, 14], [15, 15]]}, success, 1.5833154521256047e-30, 1.5833154521256047e-30
+LINEs: {u'compute': [[14, 14]]}, failed, null, null
+LINEs: {u'compute': [[15, 15]]}, success, 1.5833154521256047e-30, 1.5833154521256047e-30

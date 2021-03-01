@@ -1,0 +1,15 @@
+Output @ test_10.c:21 in compute (addr 400B34)
+49.245740 bits average error
+49.245740 bits max error
+Aggregated over 1 instances
+Influenced by erroneous expression:
+
+    (FPCore ()
+          (fmod (exp (/ 0.000000 -1.807100e305)) (- 1.183600e-306 1.248100e-317)))
+   test_10.c:19 in compute (addr 400AFE)
+   49.245740 bits average error
+   49.245740 bits max error
+   49.245740 bits average local error
+   49.245740 bits max local error
+   Aggregated over 5 instances
+

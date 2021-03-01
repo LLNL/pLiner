@@ -14,6 +14,9 @@ extern std::set<std::string> pfuncs;
 extern std::map<std::string, std::vector<std::pair<unsigned, unsigned>>> pfregions; 
 extern bool transWholeFunc; 
 
+// high precision
+extern std::string myreal;
+
 // output file
 extern std::string outfilename;
 #endif

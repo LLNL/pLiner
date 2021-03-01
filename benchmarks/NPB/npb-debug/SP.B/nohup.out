@@ -1,0 +1,528 @@
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium sp.c
+sp.c: In function ‘main’:
+sp.c:130:9: warning: variable ‘result’ set but not used [-Wunused-but-set-variable]
+     int result;
+         ^
+sp.c:225:14: warning: format ‘%f’ expects argument of type ‘double’, but argument 3 has type ‘long double’ [-Wformat=]
+       printf("  %-8s:%9.3f  (%6.2f%%)\n", 
+              ^
+sp.c:225:14: warning: format ‘%f’ expects argument of type ‘double’, but argument 4 has type ‘long double’ [-Wformat=]
+sp.c:229:16: warning: format ‘%f’ expects argument of type ‘double’, but argument 3 has type ‘long double’ [-Wformat=]
+         printf("    --> %8s:%9.3f  (%6.2f%%)\n", "sub-rhs", t, t*100./tmax);
+                ^
+sp.c:229:16: warning: format ‘%f’ expects argument of type ‘double’, but argument 4 has type ‘long double’ [-Wformat=]
+sp.c:231:16: warning: format ‘%f’ expects argument of type ‘double’, but argument 3 has type ‘long double’ [-Wformat=]
+         printf("    --> %8s:%9.3f  (%6.2f%%)\n", "rest-rhs", t, t*100./tmax);
+                ^
+sp.c:231:16: warning: format ‘%f’ expects argument of type ‘double’, but argument 4 has type ‘long double’ [-Wformat=]
+sp.c:234:16: warning: format ‘%f’ expects argument of type ‘double’, but argument 3 has type ‘long double’ [-Wformat=]
+         printf("    --> %8s:%9.3f  (%6.2f%%)\n", "sub-zsol", t, t*100./tmax);
+                ^
+sp.c:234:16: warning: format ‘%f’ expects argument of type ‘double’, but argument 4 has type ‘long double’ [-Wformat=]
+sp.c:237:16: warning: format ‘%f’ expects argument of type ‘double’, but argument 3 has type ‘long double’ [-Wformat=]
+         printf("    --> %8s:%9.3f  (%6.2f%%)\n", "redist", t, t*100./tmax);
+                ^
+sp.c:237:16: warning: format ‘%f’ expects argument of type ‘double’, but argument 4 has type ‘long double’ [-Wformat=]
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_rhs.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium adi.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium rhs.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium x_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium ninvr.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium y_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium pinvr.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium z_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium tzetar.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium add.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium txinvr.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium sp.c
+sp.c: In function ‘main’:
+sp.c:130:9: warning: variable ‘result’ set but not used [-Wunused-but-set-variable]
+     int result;
+         ^
+sp.c:225:14: warning: format ‘%f’ expects argument of type ‘double’, but argument 3 has type ‘long double’ [-Wformat=]
+       printf("  %-8s:%9.3f  (%6.2f%%)\n", 
+              ^
+sp.c:225:14: warning: format ‘%f’ expects argument of type ‘double’, but argument 4 has type ‘long double’ [-Wformat=]
+sp.c:229:16: warning: format ‘%f’ expects argument of type ‘double’, but argument 3 has type ‘long double’ [-Wformat=]
+         printf("    --> %8s:%9.3f  (%6.2f%%)\n", "sub-rhs", t, t*100./tmax);
+                ^
+sp.c:229:16: warning: format ‘%f’ expects argument of type ‘double’, but argument 4 has type ‘long double’ [-Wformat=]
+sp.c:231:16: warning: format ‘%f’ expects argument of type ‘double’, but argument 3 has type ‘long double’ [-Wformat=]
+         printf("    --> %8s:%9.3f  (%6.2f%%)\n", "rest-rhs", t, t*100./tmax);
+                ^
+sp.c:231:16: warning: format ‘%f’ expects argument of type ‘double’, but argument 4 has type ‘long double’ [-Wformat=]
+sp.c:234:16: warning: format ‘%f’ expects argument of type ‘double’, but argument 3 has type ‘long double’ [-Wformat=]
+         printf("    --> %8s:%9.3f  (%6.2f%%)\n", "sub-zsol", t, t*100./tmax);
+                ^
+sp.c:234:16: warning: format ‘%f’ expects argument of type ‘double’, but argument 4 has type ‘long double’ [-Wformat=]
+sp.c:237:16: warning: format ‘%f’ expects argument of type ‘double’, but argument 3 has type ‘long double’ [-Wformat=]
+         printf("    --> %8s:%9.3f  (%6.2f%%)\n", "redist", t, t*100./tmax);
+                ^
+sp.c:237:16: warning: format ‘%f’ expects argument of type ‘double’, but argument 4 has type ‘long double’ [-Wformat=]
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_rhs.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium adi.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium rhs.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium x_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium ninvr.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium y_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium pinvr.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium z_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium tzetar.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium add.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium txinvr.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium sp.c
+sp.c: In function ‘main’:
+sp.c:130:9: warning: variable ‘result’ set but not used [-Wunused-but-set-variable]
+     int result;
+         ^
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_rhs.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium adi.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium rhs.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium x_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium ninvr.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium y_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium pinvr.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium z_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium tzetar.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium add.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium txinvr.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_rhs.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium x_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium y_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium z_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium tzetar.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium txinvr.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_rhs.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium x_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium y_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium z_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium tzetar.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium txinvr.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_rhs.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium y_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium z_solve.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_rhs.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium y_solve.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium z_solve.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_rhs.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_rhs.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+   ===========================================
+   =      NAS PARALLEL BENCHMARKS 3.3        =
+   =      Serial Versions                    =
+   =      C                                  =
+   ===========================================
+
+cd SP; make CLASS=B
+make[1]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+make[2]: Entering directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/sys'
+../sys/setparams sp B
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium exact_solution.c
+gcc  -c -I../common -g -Wall -O3 -ffast-math -mcmodel=medium add.c
+gcc -O3 -ffast-math -mcmodel=medium -o ../bin/sp.B.x sp.o initialize.o exact_solution.o exact_rhs.o set_constants.o adi.o rhs.o x_solve.o ninvr.o y_solve.o pinvr.o z_solve.o tzetar.o add.o txinvr.o error.o verify.o ../common/print_results.o ../common/c_timers.o ../common/wtime.o -lm
+make[1]: Leaving directory '/home/huiguo15/npb-debug/NPB-debug/SP'
+/home/huiguo15/npb-debug/NPB-debug/SP
+[95m 
+
+Search for files:[00m
+
+[ add.c ]The following functions are transformed to high precision:
+[u'add']
+
+[ adi.c ]The following functions are transformed to high precision:
+[u'adi']
+
+[ ninvr.c ]The following functions are transformed to high precision:
+[u'ninvr']
+
+[ pinvr.c ]The following functions are transformed to high precision:
+[u'pinvr']
+
+[ rhs.c ]The following functions are transformed to high precision:
+[u'compute_rhs']
+
+[ sp.c ]The following functions are transformed to high precision:
+[u'main']
+
+[ txinvr.c ]The following functions are transformed to high precision:
+[u'txinvr']
+
+[ tzetar.c ]The following functions are transformed to high precision:
+[u'tzetar']
+
+[ x_solve.c ]The following functions are transformed to high precision:
+[u'x_solve']
+
+[ y_solve.c ]The following functions are transformed to high precision:
+[u'y_solve']
+
+[ z_solve.c ]The following functions are transformed to high precision:
+[u'z_solve']
+
+[ exact_rhs.c ]The following functions are transformed to high precision:
+[u'exact_rhs']
+
+[ exact_solution.c ]The following functions are transformed to high precision:
+[u'exact_solution']
+
+The following files are transformed to high precision:
+['x_solve.c', 'y_solve.c', 'adi.c', 'z_solve.c', 'pinvr.c', 'exact_solution.c', 'tzetar.c', 'txinvr.c', 'add.c', 'ninvr.c', 'sp.c', 'rhs.c', 'exact_rhs.c']
+success
+
+The following files are transformed to high precision:
+['adi.c', 'pinvr.c', 'add.c', 'ninvr.c', 'sp.c', 'rhs.c']
+consistency check failed
+
+The following files are transformed to high precision:
+['x_solve.c', 'y_solve.c', 'z_solve.c', 'exact_solution.c', 'tzetar.c', 'txinvr.c', 'exact_rhs.c']
+success
+
+The following files are transformed to high precision:
+['txinvr.c', 'x_solve.c', 'tzetar.c']
+consistency check failed
+
+The following files are transformed to high precision:
+['y_solve.c', 'z_solve.c', 'exact_rhs.c', 'exact_solution.c']
+success
+
+The following files are transformed to high precision:
+['y_solve.c', 'z_solve.c']
+consistency check failed
+
+The following files are transformed to high precision:
+['exact_rhs.c', 'exact_solution.c']
+success
+
+The following files are transformed to high precision:
+['exact_rhs.c']
+consistency check failed
+
+The following files are transformed to high precision:
+['exact_solution.c']
+success
+[95m 
+
+Search for functions:[00m
+
+The following functions are transformed to high precision:
+[u'exact_solution']
+success
+[95m 
+
+Search for loops:[00m
+
+The following areas are transformed to high precision:
+exact_solution :
+   43 -> 48
+success
+[95m 
+
+Search for bbs:[00m
+
+The following areas are transformed to high precision:
+exact_solution :
+   43 -> 43
+   44 -> 47
+success
+
+The following areas are transformed to high precision:
+exact_solution :
+   43 -> 43
+consistency check failed
+
+The following areas are transformed to high precision:
+exact_solution :
+   44 -> 47
+success
+[95m 
+
+Search for lines:[00m
+
+The following areas are transformed to high precision:
+exact_solution :
+   44 -> 44
+   45 -> 45
+   46 -> 46
+   47 -> 47
+success
+
+The following areas are transformed to high precision:
+exact_solution :
+   44 -> 44
+   45 -> 45
+success
+
+The following areas are transformed to high precision:
+exact_solution :
+   44 -> 44
+success
+
+
+ Bug area:
+exact_solution :
+  line  44
+
+
+pLiner succeeded.
+Check out plog.txt for the search log
+Check out the isolated regions and transformed files for the following code files:
+['exact_solution.c']
+2361.54user 8.70system 39:32.05elapsed 99%CPU (0avgtext+0avgdata 189156maxresident)k
+0inputs+17040outputs (0major+11016510minor)pagefaults 0swaps

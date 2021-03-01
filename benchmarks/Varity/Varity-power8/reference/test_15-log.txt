@@ -1,0 +1,8 @@
+LOOPs: [[18, 21]], success, -0, -0
+BBs: [[18, 17], [18, 17], [18, 18], [19, 19], [20, 20]], success, -inf, -inf
+BBs: [[18, 17], [18, 17]], failed, null, null
+BBs: [[18, 18], [19, 19], [20, 20]], success, -inf, -inf
+BBs: [[18, 18]], failed, null, null
+BBs: [[19, 19], [20, 20]], success, -inf, -inf
+BBs: [[19, 19]], success, -inf, -inf
+LINEs: [[19, 19]], success, -inf, -inf
