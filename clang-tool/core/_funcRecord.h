@@ -72,6 +72,7 @@ private:
   void transWholeBinaryOpStmt(Rewriter& TheRewriter, const BinaryOperator* bst);
   void transWholeCompoundAOpStmt(Rewriter& TheRewriter, const CompoundAssignOperator* comast);
   void transWholeCallExprStmt(Rewriter& TheRewriter, const CallExpr* callep);
+  string enhanceFormatSpecifierPrecision(string printf_format_specifier);
   
   void handleRegionSyncs(Rewriter& TheRewriter, const Stmt* statement);
   void handleRegionEE(unsigned lstart, unsigned lend, Rewriter& TheRewriter);

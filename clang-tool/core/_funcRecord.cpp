@@ -8,9 +8,11 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <regex>
 
 #include "_fp.h"
 #include "_funcRecord.h"
+#include "../FPDebugger.h"
 
 using namespace llvm;
 
@@ -1221,14 +1223,75 @@ void _funcRecord::transWholeCompoundAOpStmt(Rewriter& TheRewriter, const Compoun
   handleWholeSyncs(TheRewriter, comast); 
 }
 
+string _funcRecord::enhanceFormatSpecifierPrecision(string printf_format_specifier){
+  // This function converts a given format specifier from double to long doubel
+  // Ex "%.15g" to "%.15Lg"
+    vector<pair<string, string>> format_specifier_info_list;
+    pair<string,string> format_specifier_info;
+    string format_specifier, updated_format_specifier;
+    regex e(R"(%(?:\d+|\*)?(?:\.(?:\d+|\*))?[eEfFgGaA])");
+    sregex_iterator iter(printf_format_specifier.begin(), printf_format_specifier.end(), e);
+    sregex_iterator end;
+    for(auto i = iter; i!=end;i++){
+        updated_format_specifier = "";
+        format_specifier = (*i).str();
+
+        regex exp(R"([eEfFgGaA])");
+        sregex_iterator regex_iter(format_specifier.begin(), format_specifier.end(), exp);
+        for(auto j = regex_iter; j!=end; j++){
+            int position=(*regex_iter).position();
+            updated_format_specifier = format_specifier;
+            updated_format_specifier.insert(position,"L");
+
+            format_specifier_info_list.push_back(make_pair(format_specifier, updated_format_specifier));
+        }
+    }
+    for(int i=0;i<format_specifier_info_list.size();i++){
+        format_specifier_info = format_specifier_info_list[i];
+        int specifier_poistion = printf_format_specifier.find(format_specifier_info.first);
+        printf_format_specifier.replace(specifier_poistion, format_specifier_info.first.size(), format_specifier_info.second);
+
+    }
+    return printf_format_specifier;
+
+}
+
 void _funcRecord::transWholeCallExprStmt(Rewriter& TheRewriter, const CallExpr* callep){
   SourceLocation SL = callep->getExprLoc();
   unsigned line = context->getFullLoc(SL).getSpellingLineNumber();
 
   if (auto callee = dyn_cast<const clang::NamedDecl>(callep->getCalleeDecl())){
     const string cname = callee->getNameAsString(); 
-    if (mathcalls.find(cname) == mathcalls.end())
+    if (mathcalls.find(cname) == mathcalls.end()){
       llvm::errs() << "call expr (line " << line << " ): " << callee->getNameAsString() << "\n"; // non
+      
+      if(transWholeFunc && callee->getNameAsString()=="printf")
+
+      {
+        int has_double_vars = 0;
+        string printf_format;
+        // Get printf format specifier
+        clang::LangOptions langOpts;
+        langOpts.CPlusPlus = true;
+        clang::PrintingPolicy policy(langOpts);
+        raw_string_ostream stream(printf_format);
+        callep->getArg(0)->printPretty(stream, 0, policy);
+        string updated_format_specifier = enhanceFormatSpecifierPrecision(stream.str());
+        TheRewriter.ReplaceText(callep->getArg(0)->getExprLoc(),stream.str().length(),updated_format_specifier);
+
+        for(auto *epr : callep->arguments()){
+          if (auto temp = dyn_cast<ImplicitCastExpr>(epr))
+          {
+            epr = epr->IgnoreImpCasts();
+            
+            handleReads(TheRewriter, epr);
+
+          }
+        }
+      }
+    }
+      
+      
     else {
       const string cname_ld = mathcalls.find(cname)->second;
       TheRewriter.ReplaceText(callep->getExprLoc(), cname.length(), cname_ld);
