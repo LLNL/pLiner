@@ -1245,7 +1245,6 @@ string _funcRecord::enhanceFormatSpecifierPrecision(string printf_format_specifi
             continue;
         }
         int position=(*regex_iter).position();
-        cout<<position<<"\t"<<format_specifier<<endl;
         updated_format_specifier = format_specifier;
         updated_format_specifier.insert(position,"L");
 
@@ -1312,6 +1311,7 @@ int _funcRecord::handleFuncParamReads(Rewriter& TheRewriter, const clang::Expr* 
       
       if (auto callee = dyn_cast<const clang::NamedDecl>(callop->getCalleeDecl())){
         const string cname = callee->getNameAsString(); 
+        
         if (mathcalls.find(cname) == mathcalls.end())
           Debug(llvm::errs() << "call expr (line " << line << " ): " << callee->getNameAsString() << "\n"); // non
         else {
@@ -1349,14 +1349,11 @@ void _funcRecord::transWholeCallExprStmt(Rewriter& TheRewriter, const CallExpr* 
           {
             epr = epr->IgnoreImpCasts();
             int is_transformed = handleFuncParamReads(TheRewriter, epr);
-            if(is_transformed)
-            {
-              paramTransformed.push_back(is_transformed);
-            }
-            else{
-              paramTransformed.push_back(is_transformed);
-            }
-
+            paramTransformed.push_back(is_transformed);
+          }
+          else {
+            int is_transformed = handleFuncParamReads(TheRewriter, epr);
+            paramTransformed.push_back(is_transformed);
           }
         }
         string printf_format;
@@ -1377,10 +1374,6 @@ void _funcRecord::transWholeCallExprStmt(Rewriter& TheRewriter, const CallExpr* 
       TheRewriter.ReplaceText(callep->getExprLoc(), cname.length(), cname_ld);
     }
   }
-  for (const auto * epr : callep->arguments())
-    if (!isa<CXXDefaultArgExpr>(epr))
-      //wlist.push_back(epr->IgnoreParenImpCasts());
-      handleReads(TheRewriter, epr);
 
   // handle variables that require data synchronization
   handleWholeSyncs(TheRewriter, callep); 
