@@ -49,7 +49,7 @@ for value in range(1, 51):
 
             if not actual_file_success_line or not reference_file_success_line:
                 programs_mismatch.append(value)
-                print("\tResults do not match")
+                print("\tResults do not match with the reference results")
                 continue
             actual_parsed_line = parse_line(actual_file_success_line)
             reference_parsed_line = parse_line(reference_file_success_line)
@@ -61,8 +61,9 @@ for value in range(1, 51):
 
 
             if (actual_parsed_line.output ==  actual_parsed_line.transformed_output) and (actual_parsed_line.output == reference_parsed_line.output) and (actual_parsed_line.transformed_output and reference_parsed_line.transformed_output):
-                print("\tResults match")
-                print("\t\tIsolated region granularity:" +actual_parsed_line.block_type )
+                print("\tResults match with the reference results")
+                if "success"  in actual_file_success_line:
+                    print("\t\tIsolated region granularity:" +actual_parsed_line.block_type )
                 for k,v in actual_parsed_line.function_dict.items():
                     print("\t\t Function Name: " + k)
                     print ("\t\t Lines isolated: " + str(v))
