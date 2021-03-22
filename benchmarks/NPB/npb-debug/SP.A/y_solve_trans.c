@@ -42,7 +42,7 @@
 void y_solve()
 {
   int i, j, k, j1, j2, m;
-  double ru1, fac1, fac2;
+  long double ru1, fac1, fac2;
 
   if (timeron) timer_start(t_ysolve);
   for (k = 1; k <= grid_points[2]-2; k++) {
@@ -57,16 +57,16 @@ void y_solve()
     //---------------------------------------------------------------------
     for (i = 1; i <= grid_points[0]-2; i++) {
       for (j = 0; j <= grid_points[1]-1; j++) {
-        ru1 = c3c4*rho_i[k][j][i];
+        ru1 = (long double)c3c4*rho_i[k][j][i];
         cv[j] = vs[k][j][i];
         rhoq[j] = max(max(dy3+con43*ru1, dy5+c1c5*ru1), max(dymax+ru1, dy1));
       }
 
       for (j = 1; j <= grid_points[1]-2; j++) {
         lhs[j][i][0] =  0.0;
-        lhs[j][i][1] = -dtty2 * cv[j-1] - dtty1 * rhoq[j-1];
+        lhs[j][i][1] = -(long double)dtty2 * (long double)cv[j-1] - (long double)dtty1 * (long double)rhoq[j-1];
         lhs[j][i][2] =  1.0 + (long double)c2dtty1 * (long double)rhoq[j];
-        lhs[j][i][3] =  dtty2 * cv[j+1] - dtty1 * rhoq[j+1];
+        lhs[j][i][3] =  (long double)dtty2 * (long double)cv[j+1] - (long double)dtty1 * (long double)rhoq[j+1];
         lhs[j][i][4] =  0.0;
       }
     }
@@ -76,36 +76,36 @@ void y_solve()
     //---------------------------------------------------------------------
     for (i = 1; i <= grid_points[0]-2; i++) {
       j = 1;
-      lhs[j][i][2] = lhs[j][i][2] + comz5;
-      lhs[j][i][3] = lhs[j][i][3] - comz4;
-      lhs[j][i][4] = lhs[j][i][4] + comz1;
+      lhs[j][i][2] = lhs[j][i][2] + (long double)comz5;
+      lhs[j][i][3] = lhs[j][i][3] - (long double)comz4;
+      lhs[j][i][4] = lhs[j][i][4] + (long double)comz1;
 
-      lhs[j+1][i][1] = lhs[j+1][i][1] - comz4;
-      lhs[j+1][i][2] = lhs[j+1][i][2] + comz6;
-      lhs[j+1][i][3] = lhs[j+1][i][3] - comz4;
-      lhs[j+1][i][4] = lhs[j+1][i][4] + comz1;
+      lhs[j+1][i][1] = lhs[j+1][i][1] - (long double)comz4;
+      lhs[j+1][i][2] = lhs[j+1][i][2] + (long double)comz6;
+      lhs[j+1][i][3] = lhs[j+1][i][3] - (long double)comz4;
+      lhs[j+1][i][4] = lhs[j+1][i][4] + (long double)comz1;
     }
 
     for (j = 3; j <= grid_points[1]-4; j++) {
       for (i = 1; i <= grid_points[0]-2; i++) {
-        lhs[j][i][0] = lhs[j][i][0] + comz1;
-        lhs[j][i][1] = lhs[j][i][1] - comz4;
-        lhs[j][i][2] = lhs[j][i][2] + comz6;
-        lhs[j][i][3] = lhs[j][i][3] - comz4;
-        lhs[j][i][4] = lhs[j][i][4] + comz1;
+        lhs[j][i][0] = lhs[j][i][0] + (long double)comz1;
+        lhs[j][i][1] = lhs[j][i][1] - (long double)comz4;
+        lhs[j][i][2] = lhs[j][i][2] + (long double)comz6;
+        lhs[j][i][3] = lhs[j][i][3] - (long double)comz4;
+        lhs[j][i][4] = lhs[j][i][4] + (long double)comz1;
       }
     }
 
     for (i = 1; i <= grid_points[0]-2; i++) {
       j = grid_points[1]-3;
-      lhs[j][i][0] = lhs[j][i][0] + comz1;
-      lhs[j][i][1] = lhs[j][i][1] - comz4;
-      lhs[j][i][2] = lhs[j][i][2] + comz6;
-      lhs[j][i][3] = lhs[j][i][3] - comz4;
+      lhs[j][i][0] = lhs[j][i][0] + (long double)comz1;
+      lhs[j][i][1] = lhs[j][i][1] - (long double)comz4;
+      lhs[j][i][2] = lhs[j][i][2] + (long double)comz6;
+      lhs[j][i][3] = lhs[j][i][3] - (long double)comz4;
 
-      lhs[j+1][i][0] = lhs[j+1][i][0] + comz1;
-      lhs[j+1][i][1] = lhs[j+1][i][1] - comz4;
-      lhs[j+1][i][2] = lhs[j+1][i][2] + comz5;
+      lhs[j+1][i][0] = lhs[j+1][i][0] + (long double)comz1;
+      lhs[j+1][i][1] = lhs[j+1][i][1] - (long double)comz4;
+      lhs[j+1][i][2] = lhs[j+1][i][2] + (long double)comz5;
     }
 
     //---------------------------------------------------------------------
@@ -114,14 +114,14 @@ void y_solve()
     for (j = 1; j <= grid_points[1]-2; j++) {
       for (i = 1; i <= grid_points[0]-2; i++) {
         lhsp[j][i][0] = lhs[j][i][0];
-        lhsp[j][i][1] = lhs[j][i][1] - dtty2 * speed[k][j-1][i];
+        lhsp[j][i][1] = lhs[j][i][1] - (long double)dtty2 * speed[k][j-1][i];
         lhsp[j][i][2] = lhs[j][i][2];
-        lhsp[j][i][3] = lhs[j][i][3] + dtty2 * speed[k][j+1][i];
+        lhsp[j][i][3] = lhs[j][i][3] + (long double)dtty2 * speed[k][j+1][i];
         lhsp[j][i][4] = lhs[j][i][4];
         lhsm[j][i][0] = lhs[j][i][0];
-        lhsm[j][i][1] = lhs[j][i][1] + dtty2 * speed[k][j-1][i];
+        lhsm[j][i][1] = lhs[j][i][1] + (long double)dtty2 * speed[k][j-1][i];
         lhsm[j][i][2] = lhs[j][i][2];
-        lhsm[j][i][3] = lhs[j][i][3] - dtty2 * speed[k][j+1][i];
+        lhsm[j][i][3] = lhs[j][i][3] - (long double)dtty2 * speed[k][j+1][i];
         lhsm[j][i][4] = lhs[j][i][4];
       }
     }

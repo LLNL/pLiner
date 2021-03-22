@@ -39,7 +39,7 @@
 void ninvr()
 {
   int i, j, k;
-  long double r1, r2, r3, r4, r5, t1, t2;
+  double r1, r2, r3, r4, r5, t1, t2;
 
   if (timeron) timer_start(t_ninvr);
   for (k = 1; k <= nz2; k++) {
@@ -51,12 +51,12 @@ void ninvr()
         r4 = rhs[k][j][i][3];
         r5 = rhs[k][j][i][4];
 
-        t1 = (long double)bt * r3;
+        t1 = bt * r3;
         t2 = 0.5 * ( r4 + r5 );
 
         rhs[k][j][i][0] = -r2;
         rhs[k][j][i][1] =  r1;
-        rhs[k][j][i][2] = (long double)bt * ( r4 - r5 );
+        rhs[k][j][i][2] = (long double)bt * ( (long double)r4 - (long double)r5 );
         rhs[k][j][i][3] = -t1 + t2;
         rhs[k][j][i][4] =  t1 + t2;
       }

@@ -222,19 +222,19 @@ int main(int argc, char *argv[])
 
     printf("  SECTION   Time (secs)\n");
     for (i = 1; i <= t_last; i++) {
-      printf("  %-8s:%9.3Lf  (%6.2f%%)\n", 
+      printf("  %-8s:%9.3f  (%6.2f%%)\n", 
           t_names[i], trecs[i], trecs[i]*100./tmax);
       if (i == t_rhs) {
         t = trecs[t_rhsx] + trecs[t_rhsy] + trecs[t_rhsz];
-        printf("    --> %8s:%9.3Lf  (%6.2f%%)\n", "sub-rhs", t, t*100./tmax);
+        printf("    --> %8s:%9.3f  (%6.2f%%)\n", "sub-rhs", t, t*100./tmax);
         t = trecs[t_rhs] - t;
-        printf("    --> %8s:%9.3Lf  (%6.2f%%)\n", "rest-rhs", t, t*100./tmax);
+        printf("    --> %8s:%9.3f  (%6.2f%%)\n", "rest-rhs", t, t*100./tmax);
       } else if (i == t_zsolve) {
         t = trecs[t_zsolve] - trecs[t_rdis1] - trecs[t_rdis2];
-        printf("    --> %8s:%9.3Lf  (%6.2f%%)\n", "sub-zsol", t, t*100./tmax);
+        printf("    --> %8s:%9.3f  (%6.2f%%)\n", "sub-zsol", t, t*100./tmax);
       } else if (i == t_rdis2) {
         t = trecs[t_rdis1] + trecs[t_rdis2];
-        printf("    --> %8s:%9.3Lf  (%6.2f%%)\n", "redist", t, t*100./tmax);
+        printf("    --> %8s:%9.3f  (%6.2f%%)\n", "redist", t, t*100./tmax);
       }
     }
   }

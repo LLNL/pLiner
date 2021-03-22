@@ -1,12 +1,4 @@
 {
-  "pLiner-fregions": {
-    "y_solve": [
-      [
-        68,
-        68
-      ]
-    ]
-  },
   "pLiner-funcs": [
     "y_solve"
   ]
