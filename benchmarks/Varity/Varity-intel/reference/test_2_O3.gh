@@ -1,0 +1,17 @@
+compare @ test_2.c:21 in compute (addr 400BE0)
+100% incorrect
+1 incorrect values
+1 total instances
+Influenced by erroneous expressions:
+
+    (FPCore (x)
+      :pre (<= 4.040600e305 x)
+          (+ x (+ (* (/ -1.075300e305 0.000000) +inf.0) (+ -1.983100e306 1.081600e306))))
+   test_2.c:19 in compute (addr 400C6D)
+   Problematic inputs: 4.040600e305 <= x <= +inf.0
+   Example problematic input: (4.040600e305)
+   64.000000 bits average error
+   64.000000 bits max error
+   64.000000 bits average local error
+   64.000000 bits max local error
+   Aggregated over 5 instances

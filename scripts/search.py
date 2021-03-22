@@ -4,6 +4,10 @@ import subprocess
 import os
 import argparse
 
+from loopst import *
+import fglobal
+from transform import *
+
 def prRed(skk): print("\033[91m {}\033[00m" .format(skk)) 
 def prGreen(skk): print("\033[92m {}\033[00m" .format(skk)) 
 def prYellow(skk): print("\033[93m {}\033[00m" .format(skk)) 
@@ -13,162 +17,6 @@ def prCyan(skk): print("\033[96m {}\033[00m" .format(skk))
 def prLightGray(skk): print("\033[97m {}\033[00m" .format(skk)) 
 def prBlack(skk): print("\033[98m {}\033[00m" .format(skk)) 
 
-class loopStruct:
-  def __init__(self, start, end):
-    self.start, self.end = start, end
-    self.innerloops = []
-  def isInnerLoop(self, start, end):
-    return start>self.start and end<self.end
-  def addInnerLoop(self, start, end):
-    self.innerloops.append([start, end])
-  def getLoop(self):
-    return self.start, self.end
-  def getInnerLoops(self):
-    return self.innerloops
-
-class loopList:
-  def __init__(self, _forloops):
-    self.loops = []
-    for start, end in _forloops:
-      added = False
-      for l in self.loops:
-        if l.isInnerLoop(start, end):
-	  l.addInnerLoop(start, end)
-          added = True
-      if not added:
-        loop = loopStruct(start, end)
-        self.loops.append(loop)
-
-  def getLoopList(self):
-    return self.loops 
-
-
-def splitloops(_forloops):
-  _forloops.sort(key=lambda s:s[0])
-  looplist = loopList(_forloops)
-  return looplist.getLoopList()
-
-def trans_and_run(fregion):
-  global codefile, funclist, compileops, msgout
-  filesplits = codefile.split(".")
-  outfile=filesplits[0]+"_trans."+filesplits[1]
-  subprocess.call(['rm',  '-f', outfile])
-
-  status, out, err ="null", "null", "null"
-  cmd = "pLiner "+codefile+" -r="+fregion+" -o="+outfile+" "+compileops 
-  #print cmd
-  FNULL = open(os.devnull, 'w')
-  if msgout==1:  
-    subprocess.call(cmd.split(' '))
-  else:
-    subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
-  
-  if not os.path.exists(outfile):
-    status="trans error"
-    print "transformation failed."
-    return False
-
-  #print "./run.sh ", outfile
-  ret = subprocess.call("./run.sh "+outfile, shell=True, stdout=None, stderr=None)
-  if ret:
-    status="success"
-    print "success"
-    flog = open("runlog.txt", "r")
-    logs = flog.readlines()
-    out, err = logs[0].rstrip('\n'), logs[1].rstrip('\n')   
-
-  else:
-    status="failed"
-    print "failed"
-  
-  return ret, status, out, err
-
-def funcrun(flist):
-  global codefile, compileops, msgout
-  filesplits = codefile.split(".")
-  outfile=filesplits[0]+"_trans."+filesplits[1]
-  subprocess.call(['rm',  '-f', outfile])
-
-  print "\nThe following functions are transformed to high precision:"
-  print flist
-
-  status, out, err ="null", "null", "null"
-  fout = open(filesplits[0]+"-regions.json", "w")
-  json.dump({"pLiner-funcs": flist}, fout, sort_keys=True, indent=2, separators=(',', ': '))
-  fout.close()
-  cmd = "pLiner "+codefile+" --whole -r="+filesplits[0]+"-regions.json"+" -o="+outfile+" "+compileops 
-  #print cmd
-  FNULL = open(os.devnull, 'w')
-  if msgout==1:  
-    subprocess.call(cmd.split(' '))
-  else:
-    subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
-
-  if not os.path.exists(outfile):
-    status="trans error"
-    print "transformation failed."
-    return False
-
-  #print "./run.sh ", outfile
-  ret = subprocess.call("./run.sh "+outfile, shell=True, stdout=None, stderr=None)
-  if ret:
-    status="success"
-    print "success"
-    flog = open("runlog.txt", "r")
-    logs = flog.readlines()
-    out, err = logs[0].rstrip('\n'), logs[1].rstrip('\n')   
-
-  else:
-    status="failed"
-    print "failed"
-  
-  logstr = "FUNCTIONs: " + str(flist) + ", " + status +", " + out +", " + err + "\n"
-  logfile.write(logstr)
-  return ret
-
-def looprun(llist, typestr="LOOP"):
-  global codefile, funclist, compileops, logfile
-  print "\nThe following areas are transformed to high precision:"
-
-  regions = {}
-  for f in llist.keys():
-    regions[f]=[]
-    print f, ":"
-    for l in llist[f]:
-      lstart, lend = l.getLoop()
-      regions[f].append([lstart, lend])
-      print "  ", lstart, "->", lend 
-
-  filesplits = codefile.split(".")
-  fout = open(filesplits[0]+"-regions.json", "w")
-  json.dump({"pLiner-funcs": funclist, "pLiner-fregions": regions}, fout, sort_keys=True, indent=2, separators=(',', ': '))
-  fout.close()
-  ret, status, out, err = trans_and_run(filesplits[0]+"-regions.json")
-  logstr = typestr+"s: " + str(regions) + ", " + status +", " + out +", " + err + "\n"
-  logfile.write(logstr)
-  return ret
-
-def bbrun(bblist, typestr="BB"):
-  global codefile, funclist, compileops, logfile
-  print "\nThe following areas are transformed to high precision:"
-
-  regions = {}
-  for f in bblist.keys():
-    regions[f]=[]
-    print f, ":"
-    for bstart, bend in bblist[f]:
-      regions[f].append([bstart, bend])
-      print "  ", bstart, "->", bend 
-
-  filesplits = codefile.split(".")
-  fout = open(filesplits[0]+"-regions.json", "w")
-  json.dump({"pLiner-funcs": funclist, "pLiner-fregions": regions}, fout, sort_keys=True, indent=2, separators=(',', ': '))
-  fout.close()
-  ret, status, out, err = trans_and_run(filesplits[0]+"-regions.json")
-  logstr = typestr+"s: " + str(regions) + ", " + status +", " + out +", " + err + "\n"
-  logfile.write(logstr)
-  return ret
- 
 def bisection(tranregs, f, typestr):
   llist = tranregs[f]
   size = len(llist)
@@ -195,8 +43,20 @@ def bisection(tranregs, f, typestr):
 def searchfuncs(flist):
   prPurple("\n\nSearch for functions:")
 
-  # step 1: translate all funcs   
-  if not funcrun(flist):
+  # step 1: translate all funcs
+  trans, comp, exect, const = funcrun(flist) 
+  if not trans or not comp or not exect:
+    _flist = []
+    for func in flist:
+      _trans, _comp, _exect, _const = funcrun([func])
+      if _trans and _comp and _exect:
+        _flist.append(func)
+    perc=len(_flist)*100.0/len(flist)
+    print perc, "% (", len(_flist), " out of ", len(flist), " functions) can be handled in pLiner.\n"
+    flist = _flist[::]
+    trans, comp, exect, const = funcrun(flist) 
+
+  if not const:
     prRed("transforming all buggy functions does not fix the bug")
     return False, flist
 
@@ -206,10 +66,12 @@ def searchfuncs(flist):
   while size>1:
     half = size/2
     left, right = _flist[:half], _flist[half:]
-    if funcrun(left):
+    ltrans, lcomp, lexect, lconst = funcrun(left) 
+    if lconst:
       _flist, size = left, len(left)
       continue
-    if funcrun(right):
+    rtrans, rcomp, rexect, rconst = funcrun(right) 
+    if rconst:
       _flist, size = right, len(right)
       continue
     break
@@ -310,23 +172,23 @@ def print_and_exit(nlist):
       else:
         print "  line ", bstart 
 
-  global codefile, funclist, compileops, logfile, msgout
-  filesplits = codefile.split(".")
+  #global fglobal.codefile, fglobal.funclist, fglobal.compileops, fglobal.logfile, fglobal.verbose
+  filesplits = fglobal.codefile.split(".")
 
   ## generate final region log file
   fout = open(filesplits[0]+"-regions.json", "w")
-  json.dump({"pLiner-funcs": funclist, "pLiner-fregions": nlist}, fout, sort_keys=True, indent=2, separators=(',', ': '))
+  json.dump({"pLiner-funcs": fglobal.funclist, "pLiner-fregions": nlist}, fout, sort_keys=True, indent=2, separators=(',', ': '))
   fout.close()
-  logfile.close()
+  fglobal.logfile.close()
 
   ## generate final transformated program
   outfile=filesplits[0]+"_trans."+filesplits[1]
   subprocess.call(['rm',  '-f', outfile])
 
   status, out, err ="null", "null", "null"
-  cmd = "pLiner "+codefile+" -r="+filesplits[0]+"-regions.json -o="+outfile+" "+compileops 
+  cmd = "pLiner "+fglobal.codefile+" -r="+filesplits[0]+"-regions.json -o="+outfile+" "+fglobal.compileops 
   FNULL = open(os.devnull, 'w')
-  if msgout==1:  
+  if fglobal.verbose==1:  
     subprocess.call(cmd.split(' '))
   else:
     subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
@@ -335,12 +197,45 @@ def print_and_exit(nlist):
   cmd = "mv log.txt "+filesplits[0]+"-log.txt"
   subprocess.call(cmd.split(' '))
   
-  exit(0)
+  return outfile, filesplits[0]+"-regions.json", filesplits[0]+"-log.txt"
+
+def print_and_exit_whole(flist):
+  ## print bug area 
+  print "\n\n Bug area:"
+  print flist
+
+  #global fglobal.codefile, fglobal.funclist, fglobal.compileops, fglobal.logfile, fglobal.verbose
+  filesplits = fglobal.codefile.split(".")
+
+  ## generate final region log file
+  fout = open(filesplits[0]+"-regions.json", "w")
+  json.dump({"pLiner-funcs": flist}, fout, sort_keys=True, indent=2, separators=(',', ': '))
+  fout.close()
+  fglobal.logfile.close()
+
+  ## generate final transformated program
+  outfile=filesplits[0]+"_trans."+filesplits[1]
+  subprocess.call(['rm',  '-f', outfile])
+
+  status, out, err ="null", "null", "null"
+  cmd = "pLiner "+fglobal.codefile+" -r="+filesplits[0]+"-regions.json --whole -o="+outfile+" "+fglobal.compileops 
+  FNULL = open(os.devnull, 'w')
+  if fglobal.verbose==1:  
+    subprocess.call(cmd.split(' '))
+  else:
+    subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
+
+  ## save log file
+  cmd = "mv log.txt "+filesplits[0]+"-log.txt"
+  subprocess.call(cmd.split(' '))
+  
+  return outfile, filesplits[0]+"-regions.json", filesplits[0]+"-log.txt"
+
 
 def clean_and_exit():
-  global codefile
+  #global fglobal.codefile
   ## remove TEST_trans.c
-  filesplits = codefile.split(".")
+  filesplits = fglobal.codefile.split(".")
   outs=filesplits[0]+"_trans"
   subprocess.call(['rm',  '-f', outs+"."+filesplits[1], outs+"_O0", outs+"_O3"])
 
@@ -348,92 +243,56 @@ def clean_and_exit():
   cmd = "mv log.txt "+filesplits[0]+"-log.txt"
   subprocess.call(cmd.split(' '))
  
-  exit(-1)
+  return None, None, filesplits[0]+"-log.txt"
 
-def obtain_funcs():
-  global codefile, compileops, msgout
+#def obtain_funcs():
+#  #global fglobal.codefile, fglobal.compileops, fglobal.verbose
+#
+#  status, out, err ="null", "null", "null"
+#  cmd = "pLiner "+fglobal.codefile+" -po "+fglobal.compileops
+#  FNULL = open(os.devnull, 'w')
+#  if fglobal.verbose==1:
+#    subprocess.call(cmd.split(' '))
+#  else:
+#    subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
+#
+#  ans=[]
+#  with open('func-list.json') as f:
+#    data = json.load(f)
+#    funcs = data['pLiner-funcs']
+#    for func in funcs:
+#      #if func=="initPointer" or func=="main" or func=="rUpdateQuadratureData" or func=="rUpdateQuadratureData3D": ## for Laghos and Varity tests
+#      #  continue
+#      ans.append(func)	
+#
+#  return ans  
 
-  status, out, err ="null", "null", "null"
-  cmd = "pLiner "+codefile+" -po "+compileops
-  FNULL = open(os.devnull, 'w')
-  if msgout==1:
-    subprocess.call(cmd.split(' '))
-  else:
-    subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
-
-  ans=[]
-  with open('func-list.json') as f:
-    data = json.load(f)
-    funcs = data['pLiner-funcs']
-    for func in funcs:
-      #if func=="initPointer" or func=="main" or func=="rUpdateQuadratureData" or func=="rUpdateQuadratureData3D": ## for Laghos and Varity tests
-      #  continue
-      ans.append(func)	
-
-  return ans  
-
-
-if __name__=="__main__":
-  parser=argparse.ArgumentParser(description=
-  """pLiner -- search for the origin of compiler-induced inconsistency\r\n
-     arg1 : code file that may contain the origin of compiler-induced inconsistency 
-     arg2 : the compilation command followed by -- 
-   Optional argument list
-     arg3 : 0/1 to disable/enable verbose printing, 0 in default 
-  e.g., python search.py test.c "--" """, 
-  formatter_class=argparse.RawTextHelpFormatter)
-  if len(sys.argv)<3:
-    parser.print_help(sys.stderr)
-    sys.exit(1)
-  #args=parser.parse_args()
-
-  global msgout
-  global codefile, funclist, compileops
-  codefile = sys.argv[1]
-  #funclist = sys.argv[2].replace('[', ' ').replace(']', ' ').replace(',', ' ').split()
-  compileops = sys.argv[2]
-  msgout=0
-  if len(sys.argv)==4:
-    msgout=int(sys.argv[3])
-  
+def search():
   ## obtain functions  
-  funclist = obtain_funcs()
-  exclude=[]
-  if os.path.isfile('./exclude.json'):
-    with open('exclude.json') as f:
-      data = json.load(f)
-      if codefile in data:
-        funcs = data[codefile]
-        for func in funcs:
-          exclude.append(func)
-  
-  func2explore=[item for item in funclist if item not in exclude]
-  funclist = func2explore
+  fglobal.obtain_funcs()
 
-  global logfile
-  logfile = open("log.txt", "w")
+  #global fglobal.logfile
+  fglobal.logfile = open("log.txt", "w")
   ## search over the functions
-  fsuc, flist=searchfuncs(funclist)
+  fsuc, flist=searchfuncs(fglobal.funclist)
   if fsuc:
-    funclist=flist
+    fglobal.funclist=flist
   #else:
     #clean_and_exit()   
 
   ## generate analysis file
   fout = open("pLiner-input.json", "w")
-  json.dump({"pLiner-funcs": funclist}, fout, sort_keys=True, indent=2, separators=(',', ': '))
+  json.dump({"pLiner-funcs": fglobal.funclist}, fout, sort_keys=True, indent=2, separators=(',', ': '))
   fout.close() 
-  cmd = "pLiner "+codefile+" -r pLiner-input.json -ao "+compileops
+  cmd = "pLiner "+fglobal.codefile+" -r pLiner-input.json -ao "+fglobal.compileops
   FNULL = open(os.devnull, 'w')
-  if msgout==1:  
+  if fglobal.verbose==1:  
     subprocess.call(cmd.split(' '))
   else:
     subprocess.call(cmd.split(' '), stdout=FNULL, stderr=subprocess.STDOUT)
 
-
-
   forloops, bbs = {}, {}
-  for funcname in funclist:
+  for funcname in fglobal.funclist:
     datafile ="pLiner-"+funcname 
     _forloops, _bbs = [], []
     with open(datafile) as json_file:
@@ -455,7 +314,7 @@ if __name__=="__main__":
 
   ## filter bbs and search
   flt_bbs = {}
-  for funcname in funclist:
+  for funcname in fglobal.funclist:
     flt_bbs[funcname]=[] 
     _bbs=bbs[funcname]
     _llist=llist[funcname]
@@ -488,9 +347,11 @@ if __name__=="__main__":
 
   if not bsuc:
     if lsuc:
-      print_and_exit(llist)
+      return True, print_and_exit(llist)
+    elif fsuc:
+      return True, print_and_exit_whole(flist)
     else:
-      clean_and_exit()
+      return False, clean_and_exit()
 
   ## search lines
   lines = {}
@@ -507,12 +368,46 @@ if __name__=="__main__":
 
   if not nsuc:
     if bsuc:
-      print_and_exit(bblist)
+      return True, print_and_exit(bblist)
     elif lsuc:
-      print_and_exit(llist)
+      return True, print_and_exit(llist)
+    elif fsuc:
+      return True, print_and_exit_whole(flist)
     else:
-      clean_and_exit()
+      return False, clean_and_exit()
 
-  print_and_exit(nlist)
+  return True, print_and_exit(nlist)
 
+if __name__=="__main__":
+  parser=argparse.ArgumentParser(description=
+  """pLiner -- search for the origin of compiler-induced inconsistency\r\n
+     arg1 : code file that may contain the origin of compiler-induced inconsistency 
+     arg2 : the compilation command followed by -- 
+   Optional argument list
+     arg3 : 0/1 to disable/enable verbose printing, 0 in default 
+  e.g., python search.py test.c "--" """, 
+  formatter_class=argparse.RawTextHelpFormatter)
+  if len(sys.argv)<3:
+    parser.print_help(sys.stderr)
+    sys.exit(1)
+  #args=parser.parse_args()
 
+  #global fglobal.verbose
+  #global fglobal.codefile, fglobal.funclist, fglobal.compileops
+  fglobal.codefile = sys.argv[1]
+  #fglobal.funclist = sys.argv[2].replace('[', ' ').replace(']', ' ').replace(',', ' ').split()
+  fglobal.compileops = sys.argv[2]
+  fglobal.verbose=0
+  if len(sys.argv)==4:
+    fglobal.verbose=int(sys.argv[3])
+
+  suc, results = search()
+  transfile, regionfile, logfile = results
+  if suc:
+    print "\n\npLiner succeeded."
+    print "Check out ", regionfile, "for the code regions in the original code that cause the inconsistency issue."
+    print "Check out ", transfile, " for the transformed code file."
+    print "Check out ", logfile, " for the search log"
+  else:
+    print "\n\npLiner failed to isolate the inconsisency."
+    print "Check out ", logfile, " for the search log"

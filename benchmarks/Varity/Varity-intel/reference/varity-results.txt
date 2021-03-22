@@ -1,0 +1,300 @@
+test_10: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.520s 	0m0.841s
+    O0- 
+    O3- 
+  -pLiner- 	0m6.016s 
+    LINEs: {u'compute': [[19, 19]]}, success, 7.5970382151516768e-307, 7.5970382151516768e-307
+test_11: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.485s 	0m1.243s
+    O0- 
+    O3- 
+  -pLiner- 	0m4.245s 
+    LINEs: {u'compute': [[12, 12]]}, success, 1.3123e+306, 1.3123e+306
+test_12: 	0m0.013s 	0m0.002s
+  -herbgrind- 	0m1.528s 	0m1.215s
+    O0-    test_12.c:13 in compute (addr 4007EF)   test_12.c:14 in compute (addr 400845)
+    O3-    test_12.c:19 in main (addr 4007D5)
+  -pLiner- 	0m2.540s 
+    FUNCTIONs: [u'compute'], success, -1.2984e+306, -1.2984e+306
+test_13: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.484s 	0m1.197s
+    O0- 
+    O3- 
+  -pLiner- 	0m5.329s 
+    LINEs: {u'compute': [[12, 12]]}, success, -1.4641e-307, -1.4641e-307
+test_14: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.550s 	0m1.032s
+    O0- 
+    O3- 
+  -pLiner- 	0m3.643s 
+    LOOPs: {u'compute': [[14, 26]]}, success, 1.3332999998288693e-314, 1.3332999998288693e-314
+test_15: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.299s 	0m1.136s
+    O0- 
+    O3- 
+  -pLiner- 	0m2.473s 
+    FUNCTIONs: [u'compute'], success, -0, -0
+test_16: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.417s 	0m1.067s
+    O0- 
+    O3- 
+  -pLiner- 	0m6.479s 
+    LINEs: {u'compute': [[25, 25]]}, success, 1.7071999999999999e+208, 1.7071999999999999e+208
+test_17: 	0m0.001s 	0m0.002s
+  -herbgrind- 	0m1.417s 	0m1.134s
+    O0- 
+    O3- 
+  -pLiner- 	0m6.050s 
+    LINEs: {u'compute': [[14, 14]]}, success, 5.674000000000013e+304, 5.674000000000013e+304
+test_18: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.553s 	0m1.236s
+    O0- 
+    O3- 
+  -pLiner- 	0m4.805s 
+    LINEs: {u'compute': [[12, 12]]}, success, 1.0469000000000001e+305, 1.0469000000000001e+305
+test_19: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.514s 	0m1.114s
+    O0- 
+    O3- 
+  -pLiner- 	0m4.914s 
+    LINEs: {u'compute': [[13, 13]]}, success, -1.5974169396683851e+33, -1.5974169396683851e+33
+test_1: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.400s 	0m1.251s
+    O0- 
+    O3- 
+  -pLiner- 	0m3.211s 
+    LOOPs: {u'compute': [[13, 15]]}, success, 2.5006328488024744e-168, 2.5006328488024744e-168
+test_20: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.482s 	0m1.221s
+    O0- 
+    O3- 
+  -pLiner- 	0m5.496s 
+    LINEs: {u'compute': [[18, 18]]}, success, 1.2056843645804605e-165, 1.2056843645804605e-165
+test_21: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.459s 	0m1.075s
+    O0- 
+    O3- 
+  -pLiner- 	0m5.486s 
+    LINEs: {u'compute': [[18, 18]]}, success, 1.7620017235e-307, 1.7620017235e-307
+test_22: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.469s 	0m1.071s
+    O0- 
+    O3- 
+  -pLiner- 	0m4.136s 
+    LINEs: {u'compute': [[18, 18]]}, success, -7.5039999999999368e-307, -7.5039999999999368e-307
+test_23: 	0m0.017s 	0m0.002s
+  -herbgrind- 	0m1.493s 	0m1.273s
+    O0-    test_23.c:18 in compute (addr 40082B)
+    O3- compare @ test_23.c:18 in compute (addr 400900)compare @ test_23.c:14 in compute (addr 400922)
+  -pLiner- 	0m6.702s 
+    LINEs: {u'compute': [[18, 18]]}, success, -7.2555555557503252e-308, -7.2555555557503252e-308
+test_24: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.479s 	0m1.121s
+    O0- 
+    O3- 
+  -pLiner- 	0m7.552s 
+    LINEs: {u'compute': [[25, 25]]}, success, -2.1159549599979016e-13, -2.1159549599979016e-13
+test_25: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.501s 	0m1.225s
+    O0- 
+    O3- 
+  -pLiner- 	0m5.339s 
+    LINEs: {u'compute': [[12, 12]]}, success, 1.284570679187241e-322, 1.284570679187241e-322
+test_26: 	0m0.002s 	0m0.001s
+  -herbgrind- 	0m1.466s 	0m1.152s
+    O0- 
+    O3- compare @ test_26.c:12 in main (addr 4005F0)compare @ test_26.c:12 in main (addr 400612)
+  -pLiner- 	0m5.444s 
+    LINEs: {u'compute': [[14, 14]]}, success, 7.3361500000000112e-306, 7.3361500000000112e-306
+test_27: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.386s 	0m1.125s
+    O0- 
+    O3- 
+  -pLiner- 	0m2.825s 
+    LOOPs: {u'compute': [[12, 15]]}, success, -5.641917588155792e-26, -5.641917588155792e-26
+test_28: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.460s 	0m1.248s
+    O0- 
+    O3- 
+  -pLiner- 	0m4.946s 
+    LINEs: {u'compute': [[12, 12]]}, success, -1.9615999999999999e-144, -1.9615999999999999e-144
+test_29: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.489s 	0m1.117s
+    O0- 
+    O3- 
+  -pLiner- 	0m7.709s 
+    LINEs: {u'compute': [[18, 18]]}, success, 3.8716987862840613e-54, 3.8716987862840613e-54
+test_2: 	0m0.002s 	0m0.001s
+  -herbgrind- 	0m1.464s 	0m1.169s
+    O0- 
+    O3-           (+ x (+ (* (/ -1.075300e305 0.000000) +inf.0) (+ -1.983100e306 1.081600e306))))
+  -pLiner- 	0m5.464s 
+    LINEs: {u'compute': [[12, 12]]}, success, 1.7952000000000001e+306, 1.7952000000000001e+306
+test_30: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.482s 	0m1.235s
+    O0-    test_30.c:15 in compute (addr 400A00)
+    O3- 
+  -pLiner- 	0m5.698s 
+    LINEs: {u'compute': [[12, 12], [13, 13], [14, 14], [15, 15], [16, 16], [17, 17], [18, 18], [19, 19], [22, 22]]}, success, -nan, -nan
+test_31: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.548s 	0m1.200s
+    O0- 
+    O3- 
+  -pLiner- 	0m5.656s 
+    LINEs: {u'compute': [[22, 22]]}, success, 2.6605003527702027e+235, 2.6605003527702027e+235
+test_32: 	0m0.001s 	0m0.002s
+  -herbgrind- 	0m1.494s 	0m1.052s
+    O0- 
+    O3- 
+  -pLiner- 	0m2.464s 
+    FUNCTIONs: [u'compute'], success, -1.0361000000000001e-306, -1.0361000000000001e-306
+test_33: 	0m0.002s 	0m0.001s
+  -herbgrind- 	0m1.483s 	0m1.122s
+    O0-    test_33.c:19 in compute (addr 400923)
+    O3- 
+  -pLiner- 	0m6.451s 
+    LINEs: {u'compute': [[19, 19]]}, success, -1.6039e+305, -1.6039e+305
+test_34: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.474s 	0m1.142s
+    O0- 
+    O3- 
+  -pLiner- 	0m2.538s 
+    FUNCTIONs: [u'compute'], success, 0, 0
+test_35: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.474s 	0m1.174s
+    O0- 
+    O3- 
+  -pLiner- 	0m6.047s 
+    LINEs: {u'compute': [[15, 15]]}, success, -1.0897999999818878e-307, -1.0897999999818878e-307
+test_36: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.536s 	0m1.109s
+    O0-    test_36.c:12 in compute (addr 400823)
+    O3-    test_36.c:12 in compute (addr 400C65)
+  -pLiner- 	0m5.258s 
+    LINEs: {u'compute': [[12, 12]]}, success, -5.0389999999999993e+305, -5.0389999999999993e+305
+test_37: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.536s 	0m1.156s
+    O0- 
+    O3- 
+  -pLiner- 	0m4.723s 
+    LINEs: {u'compute': [[12, 12]]}, success, 1.8002999999992524e-312, 1.8002999999992524e-312
+test_38: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.500s 	0m0.983s
+    O0- 
+    O3- 
+  -pLiner- 	0m7.322s 
+    LINEs: {u'compute': [[15, 15]]}, success, 1.5833154521256047e-30, 1.5833154521256047e-30
+test_39: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.384s 	0m1.125s
+    O0- 
+    O3- 
+  -pLiner- 	0m5.344s 
+    LINEs: {u'compute': [[13, 13]]}, success, 1.8182999999999999e+306, 1.8182999999999999e+306
+test_3: 	0m0.002s 	0m0.001s
+  -herbgrind- 	0m1.354s 	0m1.102s
+    O0- 
+    O3- 
+  -pLiner- 	0m3.851s 
+    LINEs: {u'compute': [[12, 12]]}, success, -1.0159965941079395e-16, -1.0159965941079395e-16
+test_40: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.490s 	0m1.203s
+    O0-    test_40.c:13 in compute (addr 40084F)   test_40.c:13 in compute (addr 40084F)
+    O3- 
+  -pLiner- 	0m4.602s 
+    LINEs: {u'compute': [[12, 12]]}, success, -7.9350091180710703e-308, -7.9350091180710703e-308
+test_41: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.503s 	0m1.067s
+    O0- 
+    O3- 
+  -pLiner- 	0m2.443s 
+    FUNCTIONs: [u'compute'], success, 1.7104e-307, 1.7104e-307
+test_42: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.459s 	0m1.146s
+    O0-    test_42.c:13 in compute (addr 400633)
+    O3-    test_42.c:13 in compute (addr 4006EA)
+  -pLiner- 	0m4.647s 
+    LINEs: {u'compute': [[13, 13]]}, success, 1.08335e+306, 1.08335e+306
+test_43: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.383s 	0m1.140s
+    O0- 
+    O3- 
+  -pLiner- 	0m3.124s 
+    LOOPs: {u'compute': [[12, 18]]}, success, 1.2474001363375002e-306, 1.2474001363375002e-306
+test_44: 	0m0.002s 	0m0.001s
+  -herbgrind- 	0m1.557s 	0m1.133s
+    O0- 
+    O3- 
+  -pLiner- 	0m3.207s 
+    LOOPs: {u'compute': [[12, 20]]}, success, 1.7213000000000001e+306, 1.7213000000000001e+306
+test_45: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.472s 	0m0.973s
+    O0- 
+    O3- 
+  -pLiner- 	0m7.132s 
+    LINEs: {u'compute': [[19, 19]]}, success, -1, -1
+test_46: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.466s 	0m1.243s
+    O0- 
+    O3- 
+  -pLiner- 	0m2.561s 
+    FUNCTIONs: [u'compute'], success, 1.2332e-306, 1.2332e-306
+test_47: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.474s 	0m1.117s
+    O0- 
+    O3- 
+  -pLiner- 	0m2.568s 
+    FUNCTIONs: [u'compute'], success, 1.3065999999999999e+167, 1.3065999999999999e+167
+test_48: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.490s 	0m1.216s
+    O0- 
+    O3- 
+  -pLiner- 	0m2.489s 
+    FUNCTIONs: [u'compute'], success, -1.3643128744260182e-319, -1.3643128744260182e-319
+test_49: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.431s 	0m1.194s
+    O0- 
+    O3- 
+  -pLiner- 	0m4.538s 
+    LINEs: {u'compute': [[12, 12]]}, success, 1, 1
+test_4: 	0m0.001s 	0m0.002s
+  -herbgrind- 	0m1.511s 	0m1.196s
+    O0-    test_4.c:20 in compute (addr 400933)
+    O3-    test_4.c:20 in compute (addr 400B23)
+  -pLiner- 	0m5.963s 
+    LINEs: {u'compute': [[20, 20]]}, success, 1.6678000000000001e+306, 1.6678000000000001e+306
+test_50: 	0m0.012s 	0m0.002s
+  -herbgrind- 	0m1.516s 	0m1.224s
+    O0- 
+    O3- 
+  -pLiner- 	0m6.631s 
+    LINEs: {u'compute': [[15, 15]]}, success, -3.1267169310000003e-306, -3.1267169310000003e-306
+test_5: 	0m0.002s 	0m0.001s
+  -herbgrind- 	0m1.499s 	0m1.242s
+    O0- 
+    O3- 
+  -pLiner- 	0m5.382s 
+    LINEs: {u'compute': [[12, 12]]}, success, 0.1872213364886349, 0.1872213364886349
+test_6: 	0m0.002s 	0m0.001s
+  -herbgrind- 	0m1.433s 	0m1.157s
+    O0- 
+    O3- 
+  -pLiner- 	0m4.419s 
+    LINEs: {u'compute': [[12, 12]]}, success, 1.4983799999999999e+306, 1.4983799999999999e+306
+test_7: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.476s 	0m1.182s
+    O0- 
+    O3- 
+  -pLiner- 	0m5.224s 
+    LINEs: {u'compute': [[12, 12]]}, success, 2.9836851622549966e-15, 2.9836851622549966e-15
+test_8: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.504s 	0m1.215s
+    O0- 
+    O3- 
+  -pLiner- 	0m6.245s 
+    LINEs: {u'compute': [[28, 28]]}, success, -0.0048350988304273826, -0.0048350988304273826
+test_9: 	0m0.002s 	0m0.002s
+  -herbgrind- 	0m1.457s 	0m1.179s
+    O0- 
+    O3- 
+  -pLiner- 	0m4.559s 
+    LINEs: {u'compute': [[12, 12]]}, success, 1.9024985824408881e-318, 1.9024985824408881e-318

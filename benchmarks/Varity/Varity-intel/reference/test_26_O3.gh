@@ -1,0 +1,24 @@
+compare @ test_26.c:12 in main (addr 4005D8)
+100% incorrect
+1 incorrect values
+1 total instances
+Influenced by erroneous expressions:
+
+No influences found!
+
+compare @ test_26.c:12 in main (addr 4005F0)
+100% incorrect
+2 incorrect values
+2 total instances
+Influenced by erroneous expressions:
+
+No influences found!
+
+compare @ test_26.c:12 in main (addr 400612)
+100% incorrect
+2 incorrect values
+2 total instances
+Influenced by erroneous expressions:
+
+No influences found!
+

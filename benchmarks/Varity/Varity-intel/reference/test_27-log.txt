@@ -1,0 +1,3 @@
+FUNCTIONs: [u'compute'], success, 1.5370000000000001e-306, 1.5370000000000001e-306
+LOOPs: {u'compute': [[12, 15]]}, success, -5.641917588155792e-26, -5.641917588155792e-26
+BBs: {u'compute': [[12, 12], [13, 13], [14, 14]]}, failed, null, null

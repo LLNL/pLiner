@@ -1,0 +1,14 @@
+compare @ test_36.c:11 in compute (addr 400C5C)
+100% incorrect
+1 incorrect values
+1 total instances
+Influenced by erroneous expressions:
+
+    (FPCore ()
+          (sqrt (+ -1.702400e163 (/ 1.976263e-323 0.000000))))
+   test_36.c:12 in compute (addr 400C65)
+   64.000000 bits average error
+   64.000000 bits max error
+   64.000000 bits average local error
+   64.000000 bits max local error
+   Aggregated over 1 instances

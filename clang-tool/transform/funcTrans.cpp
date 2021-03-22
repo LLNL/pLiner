@@ -40,12 +40,12 @@ public:
       frecord.processLines();
 
       if (transWholeFunc)
-        frecord.transWhole(TRewriter);
+        frecord.transWhole(TRewriter, myreal);
       else
         for (vector<pair<unsigned, unsigned>>::iterator regit=pfregions[funcName].begin(); regit!=pfregions[funcName].end(); regit++){
           unsigned rstart = regit->first;
           unsigned rend = regit->second;
-          frecord.transRegion(rstart, rend, TRewriter);
+          frecord.transRegion(rstart, rend, TRewriter, myreal);
         }
     }       
     return true;     

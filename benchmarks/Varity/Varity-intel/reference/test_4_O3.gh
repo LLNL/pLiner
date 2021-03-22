@@ -1,0 +1,14 @@
+compare @ test_4.c:20 in compute (addr 400B29)
+100% incorrect
+1 incorrect values
+1 total instances
+Influenced by erroneous expressions:
+
+    (FPCore ()
+          (* (+ (/ -1.849900e192 1.316800e-246) -1.390400e305) -1.570190e-319))
+   test_4.c:20 in compute (addr 400B23)
+   61.293778 bits average error
+   61.293778 bits max error
+   61.293778 bits average local error
+   61.293778 bits max local error
+   Aggregated over 1 instances

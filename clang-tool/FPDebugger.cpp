@@ -41,6 +41,8 @@ std::vector<std::string> funclist;
 std::set<std::string> pfuncs;
 std::map<std::string, std::vector<std::pair<unsigned, unsigned>>> pfregions; 
 
+std::string myreal;
+
 static cl::OptionCategory FPDebuggerCat("pLiner Options");
 
 static cl::opt<bool> printOnly("po",cl::desc("flag that specifies whether to print the functions only, false in default"),
@@ -54,6 +56,8 @@ static cl::opt<string> inRegions("r",cl::desc("a json file that contains the reg
                      cl::init("pLiner-input.json"), cl::cat(FPDebuggerCat));
 static cl::opt<string> outFileName("o",cl::desc("name of the transformed file"),
                      cl::init("output.txt"), cl::cat(FPDebuggerCat));
+static cl::opt<string> myReal("h",cl::desc("high precision"),
+                     cl::init("long double"), cl::cat(FPDebuggerCat));
 
 int main(int argc, const char **argv) {
 
@@ -79,7 +83,7 @@ int main(int argc, const char **argv) {
 
   // Read analysis and transformation arguments
   transWholeFunc = wholetransformation;
-  
+  myreal = myReal;
   outfilename = outFileName;
 
   std::ifstream file;

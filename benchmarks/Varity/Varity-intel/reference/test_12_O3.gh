@@ -1,0 +1,14 @@
+compare @ test_12.c:13 in main (addr 400820)
+100% incorrect
+5 incorrect values
+5 total instances
+Influenced by erroneous expressions:
+
+    (FPCore ()
+          (+ 1.530300e-106 (/ 1.866200e250 0.000000)))
+   test_12.c:19 in main (addr 4007D5)
+   64.000000 bits average error
+   64.000000 bits max error
+   64.000000 bits average local error
+   64.000000 bits max local error
+   Aggregated over 1 instances

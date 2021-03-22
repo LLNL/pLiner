@@ -1,0 +1,8 @@
+LOOPs: [[27, 30]], success, nan, nan
+BBs: [[27, 26], [27, 26], [27, 27], [28, 28], [29, 29]], success, nan, nan
+BBs: [[27, 26], [27, 26]], failed, null, null
+BBs: [[27, 27], [28, 28], [29, 29]], success, nan, nan
+BBs: [[27, 27]], failed, null, null
+BBs: [[28, 28], [29, 29]], success, nan, nan
+BBs: [[28, 28]], success, nan, nan
+LINEs: [[28, 28]], success, nan, nan

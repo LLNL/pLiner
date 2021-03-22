@@ -1,0 +1,6 @@
+FUNCTIONs: [u'compute'], success, 0, 0
+LOOPs: {u'compute': []}, failed, null, null
+BBs: {u'compute': [[12, 12], [13, 13], [14, 15], [16, 16], [18, 18], [19, 19], [21, 21]]}, success, 1.3123e+306, 1.3123e+306
+BBs: {u'compute': [[12, 12], [13, 13], [14, 15]]}, success, 1.3123e+306, 1.3123e+306
+BBs: {u'compute': [[12, 12]]}, success, 1.3123e+306, 1.3123e+306
+LINEs: {u'compute': [[12, 12]]}, success, 1.3123e+306, 1.3123e+306

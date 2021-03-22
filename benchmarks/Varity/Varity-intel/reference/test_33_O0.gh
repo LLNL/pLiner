@@ -1,0 +1,23 @@
+Output @ test_33.c:22 in compute (addr 40097C)
+0.000000 bits average error
+0.000000 bits max error
+Aggregated over 1 instances
+Influenced by erroneous expression:
+
+No influences found!
+
+
+compare @ test_33.c:19 in compute (addr 40092B)
+100% incorrect
+1 incorrect values
+1 total instances
+Influenced by erroneous expressions:
+
+    (FPCore ()
+          (/ -1.383384e-321 0.000000))
+   test_33.c:19 in compute (addr 400923)
+   64.000000 bits average error
+   64.000000 bits max error
+   64.000000 bits average local error
+   64.000000 bits max local error
+   Aggregated over 1 instances

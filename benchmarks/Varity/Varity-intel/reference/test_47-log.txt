@@ -1,0 +1,3 @@
+FUNCTIONs: [u'compute'], inconsistent results, null, null
+LOOPs: {u'compute': []}, inconsistent results, null, null
+BBs: {u'compute': [[12, 13], [14, 14], [15, 15], [17, 17], [18, 18], [20, 20]]}, inconsistent results, null, null

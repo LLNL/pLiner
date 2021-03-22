@@ -8,9 +8,11 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <regex>
 
 #include "_fp.h"
 #include "_funcRecord.h"
+#include "../FPDebugger.h"
 
 using namespace llvm;
 
@@ -155,7 +157,7 @@ void _funcRecord::processStmts(const Stmt* statement){
   }
 
   string type = statement->getStmtClassName();
-  Debug(llvm::errs() << " < to handled Statement: " << type << " , line " << line << "\n"); 
+  Debug(llvm::errs() << " < to handle Statement: " << type << " , line " << line << "\n"); 
   if (type == "ReturnStmt") {
     auto rs = dyn_cast<const ReturnStmt>(statement);
     processReturnStmt(rs, lRp);
@@ -793,6 +795,115 @@ void _funcRecord::transRegionSwitchStmt(Rewriter& TheRewriter, const SwitchStmt*
   llvm::errs() << "Incomplete function : transRegionSwitchStmt \n"; 
 }
 
+void _funcRecord::transRegionCallExprStmt(Rewriter& TheRewriter, const CallExpr* callep){
+  SourceLocation SL = callep->getExprLoc();
+  unsigned line = context->getFullLoc(SL).getSpellingLineNumber();
+
+  if (auto callee = dyn_cast<const clang::NamedDecl>(callep->getCalleeDecl())){
+    const string cname = callee->getNameAsString(); 
+    if (mathcalls.find(cname) == mathcalls.end())
+      llvm::errs() << "call expr (line " << line << " ): " << callee->getNameAsString() << "\n"; // non
+    else {
+      const string cname_ld = mathcalls.find(cname)->second;
+      TheRewriter.ReplaceText(callep->getExprLoc(), cname.length(), cname_ld);
+    }
+  }
+  for (const auto * epr : callep->arguments())
+    if (!isa<CXXDefaultArgExpr>(epr))
+      //wlist.push_back(epr->IgnoreParenImpCasts());
+      handleReads(TheRewriter, epr);
+
+  // handle variables that require data synchronization
+  handleRegionSyncs(TheRewriter, callep); 
+}
+
+void _funcRecord::handleRegionSyncs(Rewriter& TheRewriter, const Stmt* statement){
+  //SourceLocation SL = statement->getExprLoc();
+  SourceLocation SL = statement->getSourceRange().getBegin();
+  unsigned line = context->getFullLoc(SL).getSpellingLineNumber();
+
+  _lineRecord* lrd = lineRs[line];
+  if (lrd->syncs.size()==0)
+    return;
+
+  SourceRange range = statement->getSourceRange();
+  unsigned int currNo = 0; 
+  map<const VarDecl*, unsigned int> vSync;
+  stringstream synEntry, synExit;
+  synEntry << "{"; 
+  for (const auto * svar : lrd->syncs){
+    SourceLocation loc = svar->getExprLoc();
+    string name = svar->getNameInfo().getAsString();
+    if (loc<range.getBegin()||range.getEnd()<loc)
+      continue; 
+
+    //if (isa<ArraySubscriptExpr>(svar))
+    //  continue;
+
+    const VarDecl* sd = dyn_cast<VarDecl>(svar->getDecl());
+    const clang::Type* ty= sd->getType().getTypePtr();
+    if (!isDouble(ty, context))
+      continue;
+
+    string mytmp; 
+    string suffix= "_"+to_string(regLstart)+"_"+to_string(regLend);
+    if (vSync.find(sd)==vSync.end()){
+      currNo += 1;
+      vSync[sd] = currNo;
+      mytmp = "tmp"+suffix+ to_string(currNo); 
+      synEntry << mytmp << "=" << name << ";";
+      synExit << name << "=" << mytmp << ";";
+    }
+    mytmp = "tmp"+ suffix+ to_string(vSync.find(sd)->second); 
+    TheRewriter.ReplaceText(loc, name.length(), mytmp);
+  }
+  TheRewriter.InsertTextBefore(range.getBegin(), synEntry.str());
+  //TheRewriter.InsertTextAfter(range.getEnd(), synExit.str());
+ 
+  synExit << "}";
+  SourceLocation exitSL = range.getEnd();
+  unsigned exitLine = context->getFullLoc(exitSL).getSpellingLineNumber();
+  unsigned off=0;
+
+  if (const auto * bop = dyn_cast<BinaryOperator>(statement)){ 
+    const clang::Expr* epr=bop->getRHS()->IgnoreImpCasts(); 
+    //llvm::errs() << "---DEBUG : checking for binary operators.\n"; 
+    while(true){
+      if (auto bop = dyn_cast<BinaryOperator>(epr)){
+        epr = bop->getRHS()->IgnoreImpCasts();
+      }else if (auto cop = dyn_cast<ConditionalOperator>(epr)){
+        epr = cop->getFalseExpr()->IgnoreImpCasts();
+      }else if (auto uop = dyn_cast<UnaryOperator>(epr)){
+        epr = uop->getSubExpr()->IgnoreImpCasts();
+      }else if (auto readV = dyn_cast<DeclRefExpr>(epr)){
+        off = readV->getNameInfo().getAsString().length();
+        //llvm::errs() << "---DEBUG INFO:" << readV->getNameInfo().getAsString() << " on line" << exitLine <<"\n"; 
+        break;
+      }else if (auto intL = dyn_cast<IntegerLiteral>(epr)){
+        //exitSL = intL->getEndLoc(); off=1;
+        off=1; // for Laghos and varity tests
+        break;
+      }else if (auto fltL = dyn_cast<FloatingLiteral>(epr)){
+        //llvm::SmallVector<char, 32> fltStr;
+        //fltL->getValue().toString(fltStr, 32, true);   
+        //llvm::errs() << "---DEBUG : float number " << fltStr << "(" << fltStr.size() <<").\n"; 
+        //exitSL = fltL->getEndLoc(); off=1;
+        off=11; // for Laghos and varity tests
+        break;
+      }else if (auto prt = dyn_cast<ParenExpr>(epr)){
+        off = 1;
+        break;
+      } else {
+        off = 1;
+        break;
+      }
+    }
+  }
+
+  //while(exitSL.getLocWithOffset(off).printToString(context->getSourceManager())!=";") off++; 
+  TheRewriter.InsertText(exitSL.getLocWithOffset(off+2), synExit.str(), true, true);
+}
+
 void _funcRecord::transRegionStmts(Rewriter& TheRewriter, const Stmt* statement){
   if (insertExit)
     return;
@@ -901,15 +1012,18 @@ void _funcRecord::transRegionStmts(Rewriter& TheRewriter, const Stmt* statement)
       transRegionStmts(TheRewriter, child);
   } else if (type == "CallExpr") {
     auto callep = dyn_cast<CallExpr>(statement);
-    transWholeCallExprStmt(TheRewriter, callep);
+    Debug(llvm::errs() << "call RegionCallExpr on line " << line << "\n");
+    transRegionCallExprStmt(TheRewriter, callep);
   } else {
     llvm::errs() << "Unhandled Statement: " << type << " , line " << line << "\n"; 
   } 
 
 }
-void _funcRecord::transRegion(unsigned lstart, unsigned lend, Rewriter& TheRewriter){
+void _funcRecord::transRegion(unsigned lstart, unsigned lend, Rewriter& TheRewriter, string myReal){
   outs() << "region transformation" << " <" << lstart << ", " << lend << ">\n";
-  typeTransTo = "long double";
+  //typeTransTo = "long double";
+  //typeTransTo = "__float128";
+  typeTransTo = myReal;
   regLstart = lstart; regLend = lend;
   newFPDels.clear();
   regEntry.str(""); regExit.str("");
@@ -1109,23 +1223,157 @@ void _funcRecord::transWholeCompoundAOpStmt(Rewriter& TheRewriter, const Compoun
   handleWholeSyncs(TheRewriter, comast); 
 }
 
+string _funcRecord::enhanceFormatSpecifierPrecision(string printf_format_specifier, vector<int> paramTransformed){
+  // This function converts a given format specifier from double to long doubel
+  // Ex "%.15g" to "%.15Lg"
+  int param_number=1;
+  vector<tuple<string, string, int>> format_specifier_info_list;
+  tuple<string,string,int> format_specifier_info;
+  string format_specifier, updated_format_specifier;
+  regex e(R"(%(?:(?:[-+0 #]{0,5})(?:\d+|\*)?(?:\.(?:\d+|\*))?(?:h|l|ll|w|L|I|I32|I64)?[cCdiouxXeEfgGaAnpsSZ]))");
+  sregex_iterator iter(printf_format_specifier.begin(), printf_format_specifier.end(), e);
+  sregex_iterator end;
+  for(auto i = iter; i!=end;i++){
+    updated_format_specifier = "";
+    format_specifier = (*i).str();
+
+    regex exp(R"([eEfFgGaA])");
+    sregex_iterator regex_iter(format_specifier.begin(), format_specifier.end(), exp);
+    if(paramTransformed[param_number]==1){
+        if(format_specifier.find("L")!=string::npos || format_specifier.find("l")!=string::npos)
+        {
+            continue;
+        }
+        int position=(*regex_iter).position();
+        updated_format_specifier = format_specifier;
+        updated_format_specifier.insert(position,"L");
+
+        format_specifier_info_list.push_back(make_tuple(format_specifier,updated_format_specifier,(*i).position()));
+    }
+    param_number++;
+  }
+  for(int i=format_specifier_info_list.size()-1;i>=0;i--){
+      format_specifier_info = format_specifier_info_list[i];
+      printf_format_specifier.replace(get<2>(format_specifier_info), get<0>(format_specifier_info).size(), get<1>(format_specifier_info));
+  }
+  return printf_format_specifier;
+
+}
+
+int _funcRecord::handleFuncParamReads(Rewriter& TheRewriter, const clang::Expr* epr){
+  if (epr==nullptr)
+    return 0;
+  int is_transformed =0;
+  SourceLocation SL = epr->getExprLoc();
+  unsigned line = context->getFullLoc(SL).getSpellingLineNumber();
+
+  vector<const clang::VarDecl*> synclist;
+
+  vector<const clang::Expr*> wlist;
+  wlist.push_back(epr);
+
+  while (!wlist.empty()){
+    epr = wlist.back(); wlist.pop_back();
+    if (auto arr = dyn_cast<ArraySubscriptExpr>(epr)){
+      epr = arr->getBase()->IgnoreParenImpCasts();
+    }
+    if (auto readV = dyn_cast<DeclRefExpr>(epr)){
+      const clang::Type* ty= readV->getDecl()->getType().getTypePtr();
+      if (isDoubleBase(ty, context)){
+        
+        const VarDecl* vdel = dyn_cast<VarDecl>(readV->getDecl()); 
+        string vname = readV->getNameInfo().getAsString();
+        map<const VarDecl*, string>::iterator it = newFPDels.find(vdel);
+        if (it == newFPDels.end()){
+          // pass
+        }else{
+          string newvname = newFPDels[vdel];
+          TheRewriter.ReplaceText(readV->getExprLoc(), vname.length(), newvname);
+          is_transformed=1; 
+        }
+      }
+    }else if (auto bop = dyn_cast<BinaryOperator>(epr)){
+      wlist.push_back(bop->getLHS()->IgnoreParenImpCasts());
+      wlist.push_back(bop->getRHS()->IgnoreParenImpCasts());
+    }else if (auto cop = dyn_cast<ConditionalOperator>(epr)){
+      wlist.push_back(cop->getCond()->IgnoreParenImpCasts());
+      wlist.push_back(cop->getTrueExpr()->IgnoreParenImpCasts());
+      wlist.push_back(cop->getFalseExpr()->IgnoreParenImpCasts());
+    }else if (auto uop = dyn_cast<UnaryOperator>(epr)){
+      StringRef opcode=uop->getOpcodeStr(uop->getOpcode());
+      
+      clang::Expr* uopr = uop->getSubExpr()->IgnoreParenImpCasts();
+      if (opcode != "&" && opcode !="*"){
+        wlist.push_back(uopr);
+        continue;
+      }
+    }else if (auto callop = dyn_cast<CallExpr>(epr)){
+      
+      if (auto callee = dyn_cast<const clang::NamedDecl>(callop->getCalleeDecl())){
+        const string cname = callee->getNameAsString(); 
+        
+        if (mathcalls.find(cname) == mathcalls.end())
+          Debug(llvm::errs() << "call expr (line " << line << " ): " << callee->getNameAsString() << "\n"); // non
+        else {
+          const string cname_ld = mathcalls.find(cname)->second;
+          TheRewriter.ReplaceText(callop->getExprLoc(), cname.length(), cname_ld);
+          is_transformed=1;
+        }
+      }
+      for (const auto * epr : callop->arguments())
+        if (!isa<CXXDefaultArgExpr>(epr))
+          wlist.push_back(epr->IgnoreParenImpCasts());
+    } else if ( string(epr->getStmtClassName()) == "IntegerLiteral" || string(epr->getStmtClassName()) == "FloatingLiteral"){
+      
+    } else {
+      llvm::errs() << "failed to obtain the variable an assignment (line " << line << ") reads.\n"; 
+    }  
+  }
+  return is_transformed;
+}
+
 void _funcRecord::transWholeCallExprStmt(Rewriter& TheRewriter, const CallExpr* callep){
   SourceLocation SL = callep->getExprLoc();
   unsigned line = context->getFullLoc(SL).getSpellingLineNumber();
+  vector<int> paramTransformed;
 
   if (auto callee = dyn_cast<const clang::NamedDecl>(callep->getCalleeDecl())){
     const string cname = callee->getNameAsString(); 
-    if (mathcalls.find(cname) == mathcalls.end())
+    if (mathcalls.find(cname) == mathcalls.end()){
       llvm::errs() << "call expr (line " << line << " ): " << callee->getNameAsString() << "\n"; // non
+      
+      if(transWholeFunc && callee->getNameAsString()=="printf")
+      {
+        for(auto *epr : callep->arguments()){
+          if (auto temp = dyn_cast<ImplicitCastExpr>(epr))
+          {
+            epr = epr->IgnoreImpCasts();
+            int is_transformed = handleFuncParamReads(TheRewriter, epr);
+            paramTransformed.push_back(is_transformed);
+          }
+          else {
+            int is_transformed = handleFuncParamReads(TheRewriter, epr);
+            paramTransformed.push_back(is_transformed);
+          }
+        }
+        string printf_format;
+        // Get printf format specifier
+        clang::LangOptions langOpts;
+        langOpts.CPlusPlus = true;
+        clang::PrintingPolicy policy(langOpts);
+        raw_string_ostream stream(printf_format);
+        callep->getArg(0)->printPretty(stream, 0, policy);
+        string updated_format_specifier = enhanceFormatSpecifierPrecision(stream.str(), paramTransformed);
+        TheRewriter.ReplaceText(callep->getArg(0)->getExprLoc(),stream.str().length(),updated_format_specifier);
+      }
+    }
+      
+      
     else {
       const string cname_ld = mathcalls.find(cname)->second;
       TheRewriter.ReplaceText(callep->getExprLoc(), cname.length(), cname_ld);
     }
   }
-  for (const auto * epr : callep->arguments())
-    if (!isa<CXXDefaultArgExpr>(epr))
-      //wlist.push_back(epr->IgnoreParenImpCasts());
-      handleReads(TheRewriter, epr);
 
   // handle variables that require data synchronization
   handleWholeSyncs(TheRewriter, callep); 
@@ -1259,8 +1507,10 @@ void _funcRecord::transWholeStmts(Rewriter& TheRewriter, const Stmt* statement){
 
 }
  
-void _funcRecord::transWhole(Rewriter& TheRewriter){
-  typeTransTo = "long double";
+void _funcRecord::transWhole(Rewriter& TheRewriter, string myReal){
+  //typeTransTo = "long double";
+  //typeTransTo = "__float128";
+  typeTransTo = myReal;
   newFPDels.clear();
 
   // add global temporary variables; 

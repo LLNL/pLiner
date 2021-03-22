@@ -1,0 +1,8 @@
+FUNCTIONs: [u'exact_solution'], success, , 
+LOOPs: {u'exact_solution': [[43, 48]]}, success, , 
+BBs: {u'exact_solution': [[43, 43], [44, 47]]}, success, , 
+BBs: {u'exact_solution': [[43, 43]]}, inconsistent results, null, null
+BBs: {u'exact_solution': [[44, 47]]}, success, , 
+LINEs: {u'exact_solution': [[44, 44], [45, 45], [46, 46], [47, 47]]}, success, , 
+LINEs: {u'exact_solution': [[44, 44], [45, 45]]}, success, , 
+LINEs: {u'exact_solution': [[44, 44]]}, success, , 
