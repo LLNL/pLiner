@@ -111,7 +111,7 @@ C_INC = -I../common
 # files larger than 2GB.
 #---------------------------------------------------------------------------
 #CFLAGS	= -g -Wall -O3 -mcmodel=medium
-CFLAGS	= -g -Wall -no-pie -O3 -ffast-math -mcmodel=medium
+CFLAGS	= -g -Wall -no-pie -Wno-unused-variable -O3 -ffast-math -mcmodel=medium
 
 #---------------------------------------------------------------------------
 # Global *link time* flags. Flags for increasing maximum executable 
