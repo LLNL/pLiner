@@ -3,19 +3,48 @@
 
 **pLiner** is a framework that helps programmers identify locations in the source of numerical code that are highly affected by floating-point compiler optimizations.  
 
-Compiler optimizations can alter significantly the numerical results of scientific computing applications. When numerical results differ significantly between compilers, optimization levels, and floating-point hardware, these numerical inconsistencies can impact programming productivity. **pLiner** is a framework that helps programmers identify locations in the source code that are highly affected by compiler optimizations. **pLiner** uses a novel approach to identify such code locations by enhancing the floating-point precision of variables and expressions. Using a guided search to locate the most significant code regions, **pLiner** can report to users such locations at different granularities, file, function, and line of code.
+Compiler optimizations can alter significantly the numerical results of scientific computing applications. When numerical results differ significantly between compilers, optimization levels, and floating-point hardware, these numerical inconsistencies can impact programming productivity. **pLiner** is a framework that helps programmers identify locations in the source code that are highly affected by compiler optimizations. **pLiner** uses a novel approach to identify such code locations by enhancing the floating-point precision of variables and expressions. Using a guided search to locate the most significant code regions, **pLiner** can report to users such locations at different granularities, file, function, and line of code. **pLiner** is implemented as a clang tool. Currently **pLiner** only supports C/C++.
 
 # Getting Started
 
-## Requirements to use pLiner
-- pLiner is implemented as a clang tool. Installing clang/LLVM compiler is a prerequisite to use pLiner. So far, we have tested pLiner on clang/LLVM 9.0.1. 
+## pLiner setup  
+There are 4 options to start using pLiner: (1) Download the docker image from DockerHub and run the container,(2) Building the docker image through dockerfile and running the container(3) building pLiner as a standalone tool, (4) building pLiner in the source tree of clang/LLVM
+
+## Requirements to use pLiner as a docker container
+- Docker client needs to be installed before starting to setup pLiner using option 1 and 2.
+
+### Option 1: Download the docker image from DockerHub and run the container.  
+  1. Download the docker image from DockerHub:
+  ```
+  docker pull ucdavisplse/llnl_pliner:latest
+  ```
+  2. Run the docker container
+  ```
+  docker run -it ucdavisplse/llnl_pliner:latest /bin/bash
+  ```
+  
+### Option 2: Building the docker image through dockerfile and running the container
+
+  1. Clone the pLiner github repo
+  ```
+  git clone https://github.com/llnl/pLiner.git
+  ```
+  2. Building the docker image from dockerfile:
+  ```
+  cd pLiner
+  docker build -t <tag-name> .
+  ```
+  2. Run the docker container
+  ```
+  docker run -it <tag-name> /bin/bash
+  ```
+
+## Requirements to use pLiner through manual setup(Option3 or Option 4).
+- Installing clang/LLVM compiler is a prerequisite to use pLiner. So far, we have tested pLiner on clang/LLVM 9.0.1. 
 - pLiner uses [nlohmann::json](https://github.com/nlohmann/json) to parse json files in C/C++. Download file `json.hpp` from [https://github.com/nlohmann/json/blob/develop/single_include/nlohmann/json.hpp](https://github.com/nlohmann/json/blob/develop/single_include/nlohmann/json.hpp) (version 3.5.0) and place it in the directory `pLiner/clang-tool` before using pLiner.
 - So far pLiner only supports C/C++.
-
-## Building pLiner  
-There are 2 options to build pLiner: (1) building pLiner as a standalone tool, (2) building pLiner in the source tree of clang/LLVM 
-
-### Option 1: building pLiner as a standalone tool  
+  
+### Option 3: building pLiner as a standalone tool  
   1. Clone pLiner and build it:  
   ```
   git clone https://github.com/llnl/pLiner.git
@@ -32,8 +61,7 @@ There are 2 options to build pLiner: (1) building pLiner as a standalone tool, (
   ```
   export PATH=$PATH-TO-pLiner/clang-tool/build:$PATH
   ```
-
-### Option 2: building pLiner in the source tree of clang/LLVM  
+  ### Option 4: building pLiner in the source tree of clang/LLVM  
   1. Building clang/LLVM 9.0.1:
   ```
   git clone https://github.com/llvm/llvm-project.git clang-llvm
@@ -63,7 +91,9 @@ There are 2 options to build pLiner: (1) building pLiner as a standalone tool, (
   export PATH=$PATH-TO-CLANG-LLVM/build/bin:$PATH
   ```
 
-### Run optional unit tests 
+
+### Run optional unit tests
+  Inside the docker container run the unit tests.
   ```
   cd pLiner/tests
   ./test.sh
