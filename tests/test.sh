@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dirs="code-pattern data-sync"
+dirs="code-pattern whole-trans"
 if [ $# -gt 0 ]; then
   dirs=$@
 fi
@@ -95,6 +95,35 @@ compile_and_compare(){
   return 0
 }
 
+compile_and_compare_region_trans(){
+	file_name_prefix=$1
+	ori="${file_name_prefix}"
+	trans="${file_name_prefix}_trans"
+
+	CC="/usr/bin/gcc"
+	CFLAGS=" -g -std=c99"
+
+	O0exe="${ori}_O0"
+	O3exe="${trans}_O3"
+	
+	input=`sed -n "2p" $ori.c | cut -d "/" -f 3 | sed "s/,/ /g"`
+	$CC -o $O0exe -O0 $CFALGS $ori.c -lm
+	$CC -o $O3exe -O3 -ffast-math $CFLAGS $trans.c -lm
+
+	ans=`./$O0exe $input` 
+	#ans=`echo $ans | awk -F"E" 'BEGIN{OFMT="%10.10f"} {print $1 * (10 ^ $2)}'` 
+
+	result=`./$O3exe $input`
+
+	#err=`echo "scale=11; ($result-$ans)/$ans" | bc -q`
+	if [ "$ans" == "$result" -a "$ans" != "" ]; then
+	  return 0 ##  success
+	else
+	  echo -e "\e[31mError: $ori and $trans -- comparison failed (inconsistent result)\e[0m"
+	  return 3 ##  failed
+	fi
+
+}
 
 tfail=0
 tpass=0
@@ -132,7 +161,7 @@ done
 
 ### test region transformation
 echo -e "\ntesting pLiner - function transformation"
-for dir in data-sync; do
+for dir in region-trans; do
   echo "  $dir"
   cd $dir
   tests=`ls test_[0-9].c`
@@ -147,7 +176,7 @@ for dir in data-sync; do
       echo -e "      - \e[31mtransformation failed\e[0m"
     fi
 
-    compile_and_compare $test.c ${test}_trans.c  
+    compile_and_compare_region_trans $test  
     if [ $? -eq 0 ]; then
       echo -e "      - \e[32mcompile&compare completed\e[0m"
       tpass=$((tpass+1))
@@ -156,7 +185,7 @@ for dir in data-sync; do
       tfail=$((tfail+1))
     fi
   done
-  #rm *_trans.c
+  rm *_trans.c *O0 *O3
   cd ..
 done
 
