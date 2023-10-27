@@ -85,7 +85,7 @@ There are 4 options to start using pLiner:
   cd ../clang-tools-extra
   git clone https://github.com/llnl/pLiner.git
   echo "add_subdirectory(pLiner/clang-tool)" >> CMakeLists.txt
-  cp pLiner/clang-tool/CMakeLists.txt-insource CMakeLists.txt
+  cp pLiner/clang-tool/CMakeLists.txt-insource pLiner/CMakeLists.txt
   cd ../build
   ninja
   ```
